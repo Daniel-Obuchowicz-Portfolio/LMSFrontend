@@ -11,7 +11,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('https://127.0.0.1:8000/api/login', {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login/2fa`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ const LoginForm = () => {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem('token', data.token);
-    //   localStorage.setItem('userId', data.id);
+      localStorage.setItem('id', data.id);
       navigate('/dashboard');
     } else {
       setError('Invalid email or password');
@@ -30,7 +30,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="font-montserrat min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-lg">
         <div>
           <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
