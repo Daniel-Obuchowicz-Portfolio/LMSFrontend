@@ -1,18 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { FaBars, FaSearch, FaHome } from 'react-icons/fa';
 import { Transition } from '@headlessui/react';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+const StatsChart = ({ borrowData, readersData, title }) => {
+  const data = {
+    labels: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+    datasets: [
+      {
+        label: 'Wypożyczenia',
+        data: borrowData,
+        borderColor: 'rgba(255, 99, 132, 1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderWidth: 2,
+        fill: false
+      },
+      {
+        label: 'Nowi czytelnicy',
+        data: readersData,
+        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderWidth: 2,
+        fill: false
+      }
+    ]
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: title,
+      },
+    },
+  };
+
+  return <Line data={data} options={options} />;
+};
 
 const Dashboard = () => {
-  const data = [
-    { title: 'Intro to CSS', author: 'Adam' },
-    {
-      title: 'A Long and Winding',
-      author: 'Adam',
-    },
-    { title: 'Intro to JavaScript', author: 'Chris' },
-  ];
+  const borrowData = [65, 59, 80, 81, 56, 55, 60, 76, 75, 88, 94, 100];
+  const readersData = [28, 48, 40, 19, 86, 27, 45, 82, 58, 33, 90, 95];
   const [user, setUser] = useState({
     id: '',
     email: '',
@@ -27,6 +62,8 @@ const Dashboard = () => {
     created_at: '',
     updated_at: ''
   });
+
+  const [books, setBooks] = useState([]);
 
   const [users, setUsers] = useState([]);
   const [sidebar, setSidebar] = useState(false);
@@ -53,6 +90,27 @@ const Dashboard = () => {
     };
 
     fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBooks(data);
+      } else {
+        console.error('Failed to fetch user data');
+      }
+    };
+
+    fetchBooks();
   }, []);
 
   useEffect(() => {
@@ -363,81 +421,139 @@ const Dashboard = () => {
             <div className="bg-white p-4 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold">Nowi czytelnicy</h2>
               <div class="p-3 px-0">
-                  <table class="w-full min-w-max table-auto text-left font-montserrat">
-                      <thead className='text-xs font-semibold uppercase bg-gray-50 rounded'>
-                        <tr>
-                          <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                            <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Czytelnik</p>
-                          </th>
-                          <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                            <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Email</p>
-                          </th>
-                          <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                            <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Adres</p>
-                          </th>
-                          <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                            <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Telefon</p>
-                          </th>
-                          <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                            <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Data urodzin</p>
-                          </th>
-                          <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                            <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Aktywny</p>
-                          </th>
-                          <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                            <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70"></p>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {users.map(user => (
+                <table class="w-full min-w-max table-auto text-left font-montserrat">
+                  <thead className='text-xs font-semibold uppercase bg-gray-50 rounded'>
+                    <tr>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Czytelnik</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Email</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Adres</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Telefon</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Data urodzin</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Aktywny</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70"></p>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map(user => (
                       <tr key={user.id}>
-                          <td class="p-2 border-b border-blue-gray-50">
-                            <div class="flex items-center gap-3">
-                              <img src={user.profile_picture} alt={`${user.first_name}'s profile`} class="inline-block relative object-center !rounded-full w-12 h-12 rounded-lg border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1" />
-                              <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">{user.first_name} {user.last_name}</p>
+                        <td class="p-2">
+                          <div class="flex items-center gap-3">
+                            <img src={user.profile_picture} alt={`${user.first_name}'s profile`} class="inline-block relative object-center !rounded-full w-12 h-12 rounded-lg border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1" />
+                            <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">{user.first_name} {user.last_name}</p>
+                          </div>
+                        </td>
+                        <td class="p-2">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.email}</p>
+                        </td>
+                        <td class="p-2">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.address}</p>
+                        </td>
+                        <td class="p-2">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.phone_number}</p>
+
+                        </td>
+
+                        <td class="p-2">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.date_of_birth}</p>
+
+                        </td>
+                        <td class="p-2">
+                          <div class="w-max">
+                            <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-900 py-1 px-2 text-xs rounded-md">
+                              <span class="">{user.is_active ? 'Active' : 'Inactive'}</span>
                             </div>
-                          </td>
-                          <td class="p-2 border-b border-blue-gray-50">
-                            <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.email}</p>
-                          </td>
-                          <td class="p-2 border-b border-blue-gray-50">
-                            <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.address}</p>
-                          </td>
-                          <td class="p-2 border-b border-blue-gray-50">
-                            <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.phone_number}</p>
-                            
-                          </td>
-                          
-                          <td class="p-2 border-b border-blue-gray-50">
-                            <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{user.date_of_birth}</p>
-                          
-                          </td>
-                          <td class="p-2 border-b border-blue-gray-50">
-                            <div class="w-max">
-                              <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-900 py-1 px-2 text-xs rounded-md">
-                                <span class="">{user.is_active ? 'Active' : 'Inactive'}</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="p-2 border-b border-blue-gray-50">
-                            <button class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20" type="button">
-                              <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-4 w-4">
-                                  <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
-                                </svg>
-                              </span>
-                            </button>
-                          </td>
-                        </tr>
-                        ))}
-                      </tbody>
-                  </table>
+                          </div>
+                        </td>
+                        <td class="p-2">
+                          <button class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20" type="button">
+                            <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-4 w-4">
+                                <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
+                              </svg>
+                            </span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold">Nowości w księgozbiorach</h2>
-              <div className="h-48 bg-gray-200 mt-4"></div>
+              <div class="p-3 px-0">
+                <table class="w-full min-w-max table-auto text-left font-montserrat">
+                  <thead className='text-xs font-semibold uppercase bg-gray-50 rounded'>
+                    <tr>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Tytuł</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Autor</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Wydawca</p>
+                      </th>
+                      <th class="border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                        <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70"></p>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {books.map(book => (
+                      <tr key={book.id}>
+                        <td class="p-2">
+                          <div class="flex items-center gap-3">
+                            <img src={book.coverImage} alt={`${book.title}'s profile`} class="inline-block relative object-center w-13 h-20 rounded-lg border border-blue-gray-50 bg-blue-gray-50/50 object-contain" />
+                            <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">{book.title}</p>
+                          </div>
+                        </td>
+                        <td class="p-2">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{book.author}</p>
+                        </td>
+                        <td class="p-2">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{book.publisher}</p>
+                        </td>
+
+                        <td class="p-2">
+                          <button class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20" type="button">
+                            <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-4 w-4">
+                                <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
+                              </svg>
+                            </span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold">Nowi czytelnicy i wypożyczenia</h2>
+              <div>
+                <StatsChart
+                  borrowData={borrowData}
+                  readersData={readersData}
+                />
+              </div>
             </div>
           </div>
         </div>
