@@ -5,14 +5,18 @@ import LoginScreen from './screens/LoginScreen';
 import Dashboard from './screens/Dashboard';
 import Readers from './screens/Readers';
 import Readerdetails from './screens/Readerdetails';
+import Books from './screens/Books';
+import BookDetails from './screens/Bookdetails';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginScreen />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/login" element={<LoginScreen />} />
+      <Route path="/" element={<Dashboard />} />
       <Route path="/readers" element={<Readers />} />
       <Route path="/readerdetails/:id" element={<Readerdetails />} />
+      <Route path="/books" element={<Books />} />
+      <Route path="/bookdetails/:id" element={<BookDetails />} />
     </Routes>
   );
 }

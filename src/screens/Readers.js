@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import { FaBars, FaSearch, FaHome } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { IoIosArrowBack } from "react-icons/io";
+import { MdOutlineMail, MdLocalPhone  } from "react-icons/md";
+import { RiExternalLinkFill } from "react-icons/ri";
+
 
 
 
@@ -99,6 +103,8 @@ const Readers = () => {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const navigate = useNavigate();
+
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] ">
@@ -108,7 +114,9 @@ const Readers = () => {
       <TopHeader/>
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-xl font-bold">Czytelnicy</h1>
+          <div className="flex justify-left items-center mb-4 gap-4 items-center">
+            <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}><IoIosArrowBack /> Powrót</button> <h1 className="text-xl font-bold"> Czytelnicy</h1>
+          </div>
             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
               <input
                 type="text"
@@ -125,7 +133,7 @@ const Readers = () => {
           <div className=" mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {currentUsers.map(user => (
-                  <div key={user.id} className="bg-white shadow-md rounded ">
+                  <div key={user.id} className="bg-white shadow-md rounded">
                     <div className="pt-[30%] bg-cover bg-[url(https://elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-e1464023124869.jpeg)] rounded"></div>
                     <div className='w-[140px] rounded-full bg-[#ffffff] mx-auto mt-[-25%] border-4 border-[#ef4444]'>
                       <img className='w-[132px] h-[132px] object-cover rounded-full' src={user.profile_picture} alt={`${user.first_name} ${user.last_name}`} />
@@ -133,9 +141,9 @@ const Readers = () => {
       
                     <div className="p-4">
                       <h3 className="text-2xl font-bold mb-1">{user.first_name} {user.last_name}</h3>
-                      <p className="mb-1">Email: {user.email}</p>
-                      <p>Phone: {user.phone_number}</p>
-                     <Link to={`/readerdetails/${user.id}`} className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Szczegóły</Link>
+                      <p className="mb-1 flex gap-3 items-center"><MdOutlineMail/> {user.email}</p>
+                      <p className="flex gap-3 items-center"><MdLocalPhone /> {user.phone_number}</p>
+                     <Link to={`/readerdetails/${user.id}`} className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Szczegóły <RiExternalLinkFill/> </Link>
                     </div>
                   </div>
                 ))}

@@ -73,7 +73,7 @@ const TopHeader = () => {
             </div>
             <div className="flex items-center space-x-6">
                 <div class="hidden lg:flex items-center space-x-4">
-                    <img src={user.profile_picture} alt="Dr. Jose Simmons" class="w-10 h-10 object-cover rounded-full" /><div>
+                    <img src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt="Dr. Jose Simmons" class="w-10 h-10 object-cover rounded-full" /><div>
                         <h2 class="text-sm font-semibold">{user.first_name} {user.last_name}</h2>
                         <p class="text-xs text-gray-500">General Practitioner</p></div>
                     <div class="flex items-center space-x-[12px]">

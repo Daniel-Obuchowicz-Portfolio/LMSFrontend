@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaBookReader } from 'react-icons/fa';
+import { TbBooks } from "react-icons/tb";
 import { Transition } from '@headlessui/react';
+import { Link } from 'react-router-dom';
 
 const Menu = () => {
     const [sidebar, setSidebar] = useState(false);
@@ -25,131 +27,22 @@ const Menu = () => {
                     id="side-menu"
                     className="w-full float-none font-medium"
                 >
-                    {/* Dropdown */}
+
+
                     <li className="relative text-white">
-                        <a
-                            className={`block py-2.5 px-6 ${selected === 1 ? 'text-indigo-500 dark:text-indigo-400' : ''
-                                } hover:text-indigo-500 dark:hover:text-indigo-400`}
-                            href="javascript:;"
-                            onClick={() => setSelected(selected !== 1 ? 1 : null)}
-                        >
-                            <div className="flex items-center justify-between">
-                                <div>
-
-                                    <span className="flex items-center gap-3"> <FaHome className="" /> Dashboards</span>
-                                </div>
-                                {/* Caret */}
-                                <span className="inline-block float-end">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor"
-                                        className={`transform transition duration-300 ${selected === 1 ? 'rotate-0' : 'ltr:-rotate-90 rtl:rotate-90'
-                                            }`}
-                                        width=".8rem"
-                                        height=".8rem"
-                                        viewBox="0 0 16 16"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                                        ></path>
-                                    </svg>
-                                </span>
-                            </div>
-
-                        </a>
-                        {/* Dropdown menu */}
-                        <Transition
-                            show={selected === 1}
-                            enter="transition-all duration-200 ease-out"
-                            enterFrom="opacity-0 scale-95"
-                            enterTo="opacity-100 scale-100"
-                            className="block rounded rounded-t-none top-full z-50 py-0.5 text-start mb-1 font-normal bg-[#0000004a]"
-                        >
-                            <ul>
-                                <li className="relative">
-                                    <a
-                                        className="active block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index.html"
-                                    >
-                                        CMS
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-analytics.html"
-                                    >
-                                        Analytics
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-ecommerce.html"
-                                    >
-                                        Ecommerce
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-projects.html"
-                                    >
-                                        Projects
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-crm.html"
-                                    >
-                                        CRM
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-hosting.html"
-                                    >
-                                        Hosting
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-saas.html"
-                                    >
-                                        Saas
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-sales.html"
-                                    >
-                                        Sales
-                                    </a>
-                                </li>
-                                <li className="relative">
-                                    <a
-                                        className="block w-full py-2 px-6 clear-both whitespace-nowrap hover:text-indigo-500 dark:hover:text-indigo-400"
-                                        href="index-marketing.html"
-                                    >
-                                        Marketing
-                                    </a>
-                                </li>
-                            </ul>
-                        </Transition>
+                        <Link to={`/`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
+                            <span className="flex items-center gap-3"> <FaHome/> Strona główna</span>
+                        </Link>
                     </li>
-
-                    <li>
-                        <a
-                            className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400"
-                            href="calendar.html"
-                        >
-                            <span>Calendar</span>
-                        </a>
+                    <li className="relative text-white">
+                        <Link to={`/readers`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
+                            <span className="flex items-center gap-3"> <FaBookReader /> Czytelnicy</span>
+                        </Link>
+                    </li>
+                    <li className="relative text-white">
+                        <Link to={`/books`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
+                            <span className="flex items-center gap-3"> <TbBooks /> Ksiegozbiór</span>
+                        </Link>
                     </li>
 
                     {/* More dropdowns similar to the one above */}

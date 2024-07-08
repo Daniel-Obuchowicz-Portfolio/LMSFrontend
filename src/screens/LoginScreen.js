@@ -23,7 +23,7 @@ const LoginForm = () => {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       localStorage.setItem('id', data.id);
-      navigate('/dashboard');
+      navigate('/');
     } else {
       setError('Invalid email or password');
     }

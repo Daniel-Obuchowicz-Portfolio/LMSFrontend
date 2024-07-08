@@ -5,16 +5,16 @@ import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
 
-const Readerdetails = () => {
+const BookDetails = () => {
   const { id } = useParams();
-  const [user, setUser] = useState(null);
+  const [book, setBook] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchBook = async () => {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${id}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -23,48 +23,48 @@ const Readerdetails = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data);
+        setBook(data);
       } else {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to fetch user data',
+          text: 'Failed to fetch book data',
         });
       }
       setIsLoading(false);
     };
 
-    fetchUser();
+    fetchBook();
   }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setBook({ ...book, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/put`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${id}/put`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(book)
     });
 
     if (response.ok) {
       Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'User updated successfully',
+        text: 'Book updated successfully',
       });
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to update user',
+        text: 'Failed to update book',
       });
     }
   };
@@ -79,96 +79,105 @@ const Readerdetails = () => {
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
             </button>
-            <h1 className="text-xl font-bold"> Edytuj czytelnika</h1>
+            <h1 className="text-xl font-bold">Edytuj Książkę</h1>
           </div>
           <div className="flex">
             <div className="w-2/5 bg-white shadow-md rounded p-6 h-fit">
               <div className="flex flex-col items-center mb-4">
-                <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] mx-auto border-4 border-[#ef4444] mb-5'>
-                  <img className="w-[132px] h-[132px] rounded-full mb-4 object-cover" src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user?.first_name} ${user?.last_name}`} />
-                </div>
-                <h3 className="text-xl font-bold">{user?.first_name} {user?.last_name}</h3>
-                <p className="text-gray-600">{user?.email}</p>
+                <div className='px-4'>
+                    <div className='w-[140px] bg-[#ffffff] rounded-[4px]'>
+                      <img className='w-[132px] object-cover rounded-[4px] mb-3' src={book?.coverImage || '/img/default-cover.jpg'} alt={book?.title} />
+                    </div>
+                  </div>
+                <h3 className="text-xl font-bold">{book?.title}</h3>
+                <p className="text-gray-600">Author: {book?.author}</p>
               </div>
             </div>
             <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">
               <div className="mx-auto">
-                <h2 className="text-2xl font-bold mb-4">Edit Information</h2>
+                <h2 className="text-2xl font-bold mb-4">Informacje o książce</h2>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4">
-                    <label className="block text-gray-700">First Name</label>
+                    <label className="block text-gray-700">Tytuł</label>
                     <input
                       type="text"
-                      name="first_name"
-                      value={user?.first_name}
+                      name="title"
+                      value={book?.title}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300"
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700">Last Name</label>
+                    <label className="block text-gray-700">Autor</label>
                     <input
                       type="text"
-                      name="last_name"
-                      value={user?.last_name}
+                      name="author"
+                      value={book?.author}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300"
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={user?.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700">Phone Number</label>
+                    <label className="block text-gray-700">ISBN</label>
                     <input
                       type="text"
-                      name="phone_number"
-                      value={user?.phone_number}
+                      name="isbn"
+                      value={book?.isbn}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300"
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700">Address</label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={user?.address}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700">Date of Birth</label>
+                    <label className="block text-gray-700">Data Publikacji</label>
                     <input
                       type="date"
-                      name="date_of_birth"
-                      value={user?.date_of_birth}
+                      name="publicationDate"
+                      value={book?.publicationDate}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300"
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700">Gender</label>
-                    <select
-                      name="gender"
-                      value={user?.gender}
+                    <label className="block text-gray-700">Wydawca</label>
+                    <input
+                      type="text"
+                      name="publisher"
+                      value={book?.publisher}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300"
-                    >
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Gatunek</label>
+                    <input
+                      type="text"
+                      name="genre"
+                      value={book?.genre}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Streszczenie</label>
+                    <textarea
+                      name="summary"
+                      value={book?.summary}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 h-32"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Liczba Stron</label>
+                    <input
+                      type="number"
+                      name="pageCount"
+                      value={book?.pageCount}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300"
+                    />
                   </div>
                   <button type="submit" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                    Save
+                    Zapisz zmiany
                   </button>
                 </form>
               </div>
@@ -180,4 +189,4 @@ const Readerdetails = () => {
   );
 };
 
-export default Readerdetails;
+export default BookDetails;
