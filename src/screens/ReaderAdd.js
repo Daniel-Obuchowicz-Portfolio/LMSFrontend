@@ -5,38 +5,12 @@ import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
 
-const Readerdetails = () => {
+const ReaderAdd = () => {
   const { id } = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ is_active: true });
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data);
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch user data',
-        });
-      }
-      setIsLoading(false);
-    };
-
-    fetchUser();
-  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,43 +28,45 @@ const Readerdetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-  
-    let updatedUser = {...user};
-  
-    // Convert file to base64 if present
+
     if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async () => {
-        updatedUser.profile_picture_p = reader.result;
-  
-        // Continue with fetch inside the onload to ensure base64 string is set
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/put`, {
-          method: 'PUT',
-          headers: {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+            const updatedUser = { ...user, profile_picture_p: reader.result };
+            await submitUserData(updatedUser, token);
+        };
+        reader.onerror = error => console.log('Error: ', error);
+    } else {
+        // Submit without a profile picture
+        await submitUserData(user, token);
+    }
+};
+
+const submitUserData = async (userData, token) => {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register`, {
+        method: 'POST',
+        headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(updatedUser)
-        });
-  
-        if (response.ok) {
-          Swal.fire({
+        },
+        body: JSON.stringify(userData)
+    });
+
+    if (response.ok) {
+        Swal.fire({
             icon: 'success',
             title: 'Success',
-            text: 'User updated successfully',
-          });
-        } else {
-          Swal.fire({
+            text: 'User registered successfully',
+        });
+    } else {
+        Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to update user',
-          });
-        }
-      };
-      reader.onerror = error => console.log('Error: ', error);
+            text: 'Failed to register user',
+        });
     }
-  };
+};
   
 
   return (
@@ -103,7 +79,7 @@ const Readerdetails = () => {
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
             </button>
-            <h1 className="text-xl font-bold"> Edytuj czytelnika</h1>
+            <h1 className="text-xl font-bold"> Dodaj nowego czytelnika</h1>
           </div>
           <div className="flex">
             <div className="w-2/5 bg-white shadow-md rounded p-6 h-fit">
@@ -119,6 +95,7 @@ const Readerdetails = () => {
               <div className="mx-auto">
                 <h2 className="text-2xl font-bold mb-4">Edit Information</h2>
                 <form onSubmit={handleSubmit}>
+                <input type="hidden" name="is_active" value={user.is_active} onChange={handleInputChange} />
                   <div className="mb-4">
                     <label className="block text-gray-700">First Name</label>
                     <input
@@ -192,6 +169,16 @@ const Readerdetails = () => {
                     </select>
                   </div>
                   <div className="mb-4">
+                    <label className="block text-gray-700">Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      value={user?.password}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300"
+                    />
+                  </div>
+                  <div className="mb-4">
                     <label className="block text-gray-700">Profile Picture</label>
                     <input
                       name='profile_picture_p'
@@ -213,4 +200,4 @@ const Readerdetails = () => {
   );
 };
 
-export default Readerdetails;
+export default ReaderAdd;

@@ -3,6 +3,8 @@ import { FaHome, FaBookReader } from 'react-icons/fa';
 import { TbBooks } from "react-icons/tb";
 import { Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
+import { HiUserAdd } from "react-icons/hi";
+
 
 const Menu = () => {
     const [sidebar, setSidebar] = useState(false);
@@ -37,6 +39,12 @@ const Menu = () => {
                     <li className="relative text-white">
                         <Link to={`/readers`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
                             <span className="flex items-center gap-3"> <FaBookReader /> Czytelnicy</span>
+                        </Link>
+                    </li>
+                    <li className="relative text-white">
+                        <Link to={`/reader/add`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
+                            <span className="flex items-center gap-3"> <HiUserAdd />
+                            Nowy czytelnik</span>
                         </Link>
                     </li>
                     <li className="relative text-white">
