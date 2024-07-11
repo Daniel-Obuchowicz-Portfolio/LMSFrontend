@@ -118,7 +118,7 @@ const Books = () => {
                   <div className="pt-[30%] bg-cover bg-[url('https://elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-e1464023124869.jpeg')] rounded"></div>
                   <div className='px-4'>
                     <div className='w-[100px] bg-[#ffffff] mr-auto mt-[-25%] rounded-[4px]'>
-                      <img className='w-[100px] object-cover rounded-[4px]' src={book.coverImage} alt={`${book.title}`} />
+                      <img className={book?.coverImage ? 'w-[100px] h-[159px] object-cover rounded-[4px]' : 'w-[100px] h-[159px] rounded-[4px]'} src={book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={`${book.title}`} />
                     </div>
                   </div>
                   <div className="p-4">

@@ -5,38 +5,13 @@ import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
 
-const BookDetails = () => {
+const BookAdd = () => {
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
 
-  useEffect(() => {
-    const fetchBook = async () => {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${id}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setBook(data);
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch book data',
-        });
-      }
-      setIsLoading(false);
-    };
-
-    fetchBook();
-  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,51 +21,53 @@ const BookDetails = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setBook((prevBook) => ({ ...prevBook, coverImage: URL.createObjectURL(file) }));
+      setBook((prevBook) => ({ ...prevBook, profile_picture: URL.createObjectURL(file) }));
       setFile(file);
-    }
-  };
-
-  const submitBookData = async (updatedBook, token) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${id}/put`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updatedBook)
-    });
-
-    if (response.ok) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Book updated successfully',
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to update book',
-      });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+
     if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async () => {
-        const updatedBook = { ...book, profile_picture_p: reader.result };
-        await submitBookData(updatedBook, token);
-      };
-      reader.onerror = error => console.log('Error: ', error);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+            const updatedBook = { ...book, profile_picture_p: reader.result };
+            await submitBookData(updatedBook, token);
+        };
+        reader.onerror = error => console.log('Error: ', error);
     } else {
-      await submitBookData(book, token);
+        // Submit without a profile picture
+        await submitBookData(book, token);
     }
-  };
+};
+
+const submitBookData = async (bookData, token) => {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/post`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bookData)
+    });
+
+    if (response.ok) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'User registered successfully',
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to register user',
+        });
+    }
+};
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff]">
@@ -102,14 +79,14 @@ const BookDetails = () => {
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
             </button>
-            <h1 className="text-xl font-bold">Edytuj Książkę</h1>
+            <h1 className="text-xl font-bold">Dodaj Książkę</h1>
           </div>
           <div className="flex">
             <div className="w-2/5 bg-white shadow-md rounded p-6 h-fit">
               <div className="flex flex-col items-center mb-4">
                 <div className='px-4'>
-                    <div className='w-[140px] bg-[#ffffff] rounded-[4px]'>
-                      <img className='w-[132px] object-cover rounded-[4px] mb-3' src={book?.coverImage || '/img/default-cover.jpg'} alt={book?.title} />
+                    <div className='w-[240px] bg-[#ffffff] rounded-[4px]'>
+                      <img className='w-[232px] object-cover rounded-[4px] mb-3' src={book?.profile_picture || '/img/blank-book-cover-over-png.png'} alt={book?.title} />
                     </div>
                   </div>
                 <h3 className="text-xl font-bold">{book?.title}</h3>
@@ -221,4 +198,4 @@ const BookDetails = () => {
   );
 };
 
-export default BookDetails;
+export default BookAdd;

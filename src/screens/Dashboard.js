@@ -289,7 +289,7 @@ const Dashboard = () => {
                       <tr key={book.id}>
                         <td class="p-2">
                           <div class="flex items-center gap-3">
-                            <img src={book.coverImage} alt={`${book.title}'s profile`} class="inline-block relative object-center w-13 h-20 rounded-lg border border-blue-gray-50 bg-blue-gray-50/50 object-contain" />
+                            <img src={book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={`${book.title}'s profile`} class="inline-block relative object-center w-13 h-20 rounded-lg border border-blue-gray-50 bg-blue-gray-50/50 object-contain" />
                             <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">{book.title}</p>
                           </div>
                         </td>

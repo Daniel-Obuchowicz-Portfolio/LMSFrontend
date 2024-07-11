@@ -8,6 +8,7 @@ import Readerdetails from './screens/Readerdetails';
 import Books from './screens/Books';
 import BookDetails from './screens/Bookdetails';
 import ReaderAdd from './screens/ReaderAdd';
+import BookAdd from './screens/BookAdd';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/readerdetails/:id" element={<Readerdetails />} />
       <Route path="/books" element={<Books />} />
       <Route path="/bookdetails/:id" element={<BookDetails />} />
+      <Route path="/book/add" element={<BookAdd />} />
     </Routes>
   );
 }
