@@ -90,6 +90,31 @@ const Readerdetails = () => {
       };
       reader.onerror = error => console.log('Error: ', error);
     }
+    else{
+      // Continue with fetch inside the onload to ensure base64 string is set
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/put`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedUser)
+      });
+
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'User updated successfully',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update user',
+        });
+      }
+    }
   };
   
 

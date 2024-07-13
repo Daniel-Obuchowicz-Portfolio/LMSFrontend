@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaBars, FaSearch, FaHome } from 'react-icons/fa';
+import { redirect } from 'react-router-dom';
 
 
 const TopHeader = () => {
@@ -29,6 +30,12 @@ const TopHeader = () => {
                     }
                 });
 
+                if(response.status === 401){
+                    
+                    return redirect("/login");
+                    
+                }
+
                 if (response.ok) {
                     const data = await response.json();
                     setUser({
@@ -46,7 +53,8 @@ const TopHeader = () => {
                         updated_at: data.updated_at
                     });
                 } else {
-                    console.error('Failed to fetch user data');
+                    console.error(response);
+                    
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);

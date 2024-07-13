@@ -4,6 +4,7 @@ import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
+import { MdArrowForwardIos } from "react-icons/md";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -105,15 +106,28 @@ const BookDetails = () => {
             <h1 className="text-xl font-bold">Edytuj Książkę</h1>
           </div>
           <div className="flex">
-            <div className="w-2/5 bg-white shadow-md rounded p-6 h-fit">
-              <div className="flex flex-col items-center mb-4">
-                <div className='px-4'>
-                    <div className='w-[140px] bg-[#ffffff] rounded-[4px]'>
-                      <img className='w-[132px] object-cover rounded-[4px] mb-3' src={book?.coverImage || '/img/default-cover.jpg'} alt={book?.title} />
+            <div className="w-2/5">
+              <div className="bg-white shadow-md rounded p-6 h-fit">
+              <h2 className="text-xl font-bold mb-4 text-left">Szybkie info</h2>
+                <div className="flex flex-col items-center mb-4">
+                  <div className='px-4'>
+                      <div className='w-[140px] bg-[#ffffff] rounded-[4px]'>
+                        <img className='w-[132px] object-cover rounded-[4px] mb-3' src={book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={book?.title} />
+                      </div>
                     </div>
+                  <h3 className="text-xl font-bold">{book?.title}</h3>
+                  <p className="text-gray-600">Author: {book?.author}</p>
+                </div>
+              </div>
+              <div className="bg-white shadow-md rounded p-6 h-fit mt-5">
+                <div className="flex justify-between mb-4">
+                  <div className=''>
+                    <h2 className="text-xl font-bold mb-4 text-left">Ostatnie wypożyczenia</h2>
                   </div>
-                <h3 className="text-xl font-bold">{book?.title}</h3>
-                <p className="text-gray-600">Author: {book?.author}</p>
+                  <div className=''>
+                      <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>Powrót <MdArrowForwardIos /></button>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">
