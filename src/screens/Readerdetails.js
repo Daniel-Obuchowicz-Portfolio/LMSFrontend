@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
+import { MdArrowForwardIos } from "react-icons/md";
 
 const Readerdetails = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
+  const [borrowings, setBorrowings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
@@ -35,7 +37,29 @@ const Readerdetails = () => {
       setIsLoading(false);
     };
 
+    const fetchBorrowings = async () => {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/user/${id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBorrowings(data);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to fetch borrowings data',
+        });
+      }
+    };
+
     fetchUser();
+    fetchBorrowings();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -54,16 +78,16 @@ const Readerdetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-  
-    let updatedUser = {...user};
-  
+
+    let updatedUser = { ...user };
+
     // Convert file to base64 if present
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = async () => {
         updatedUser.profile_picture_p = reader.result;
-  
+
         // Continue with fetch inside the onload to ensure base64 string is set
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/put`, {
           method: 'PUT',
@@ -73,7 +97,7 @@ const Readerdetails = () => {
           },
           body: JSON.stringify(updatedUser)
         });
-  
+
         if (response.ok) {
           Swal.fire({
             icon: 'success',
@@ -90,7 +114,7 @@ const Readerdetails = () => {
       };
       reader.onerror = error => console.log('Error: ', error);
     }
-    else{
+    else {
       // Continue with fetch inside the onload to ensure base64 string is set
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${id}/put`, {
         method: 'PUT',
@@ -116,7 +140,6 @@ const Readerdetails = () => {
       }
     }
   };
-  
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff]">
@@ -131,13 +154,37 @@ const Readerdetails = () => {
             <h1 className="text-xl font-bold"> Edytuj czytelnika</h1>
           </div>
           <div className="flex">
-            <div className="w-2/5 bg-white shadow-md rounded p-6 h-fit">
-              <div className="flex flex-col items-center mb-4">
-                <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] mx-auto border-4 border-[#ef4444] mb-5'>
-                  <img className="w-[132px] h-[132px] rounded-full mb-4 object-cover" src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user?.first_name} ${user?.last_name}`} />
+            <div className="w-2/5">
+              <div className="bg-white shadow-md rounded p-6 h-fit mb-4">
+                <div className="flex flex-col items-center mb-4">
+                  <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] mx-auto border-4 border-[#ef4444] mb-5'>
+                    <img className="w-[132px] h-[132px] rounded-full mb-4 object-cover" src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user?.first_name} ${user?.last_name}`} />
+                  </div>
+                  <h3 className="text-xl font-bold">{user?.first_name} {user?.last_name}</h3>
+                  <p className="text-gray-600">{user?.email}</p>
                 </div>
-                <h3 className="text-xl font-bold">{user?.first_name} {user?.last_name}</h3>
-                <p className="text-gray-600">{user?.email}</p>
+              </div>
+              <div className="bg-white shadow-md rounded p-6 h-fit">
+                <div className="flex flex-col mb-4">
+                <div className='flex justify-between items-center'>
+                  <h2 className="text-2xl font-bold mb-4">Ostatnie wypożyczenia</h2>
+                  <Link to={`/readerdetails/${user?.id}/borrowings`} class="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Zobacz wszystkie <MdArrowForwardIos /></Link>
+                  </div>
+                  {borrowings.map((borrowing) => (
+                    <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded">
+                      <div className="md:w-1/4 flex justify-center md:justify-start mb-4 md:mb-0">
+                        <img className="w-full object-cover" src={borrowing.book.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book.title} />
+                      </div>
+                      <div className="md:w-3/4 md:pl-4">
+                        <h2 className="font-bold text-2xl mb-3">{borrowing.book.title}</h2>
+                        <p className="text-gray-600 mb-1">Autor: <strong>{borrowing.book.author}</strong></p>
+                        <p className="text-gray-600 mb-1">Borrowing Date: <strong>{new Date(borrowing.borrowing_date.date).toLocaleDateString()}</strong></p>
+                        <p className="text-gray-600 mb-1">Return Date: <strong className='bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'>{borrowing.realreturndate.date === "-0001-11-30 00:00:00.000000" ? "Not Returned" : new Date(borrowing.realreturndate.date).toLocaleDateString()}</strong></p>
+                        <p className="text-gray-600 mb-1">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">

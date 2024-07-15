@@ -9,6 +9,7 @@ import Books from './screens/Books';
 import BookDetails from './screens/Bookdetails';
 import ReaderAdd from './screens/ReaderAdd';
 import BookAdd from './screens/BookAdd';
+import ReaderdetailsBorrowings from './screens/ReaderdetailsBorrowings';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/readers" element={<Readers />} />
       <Route path="/reader/add" element={<ReaderAdd />} />
       <Route path="/readerdetails/:id" element={<Readerdetails />} />
+      <Route path="/readerdetails/:id/borrowings" element={<ReaderdetailsBorrowings />} />
       <Route path="/books" element={<Books />} />
       <Route path="/bookdetails/:id" element={<BookDetails />} />
       <Route path="/book/add" element={<BookAdd />} />
