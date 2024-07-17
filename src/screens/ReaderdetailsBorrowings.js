@@ -22,6 +22,8 @@ const ReaderdetailsBorrowings = () => {
     realreturndate: '',
     comments: ''
   });
+  const [bookSearchResults, setBookSearchResults] = useState([]);
+  const [bookTitle, setBookTitle] = useState('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -129,12 +131,39 @@ const ReaderdetailsBorrowings = () => {
       });
     }
   };
-  
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewBorrowing({ ...newBorrowing, [name]: value });
+  };
+
+  const handleBookSearchChange = async (e) => {
+    const title = e.target.value;
+    setBookTitle(title);
+    if (title.length > 2) {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/booksearch?query=${title}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBookSearchResults(data);
+      } else {
+        setBookSearchResults([]);
+      }
+    } else {
+      setBookSearchResults([]);
+    }
+  };
+
+  const handleBookSelect = (book) => {
+    setNewBorrowing({ ...newBorrowing, book_id: book.id });
+    setBookTitle(book.title);
+    setBookSearchResults([]);
   };
 
   return (
@@ -202,16 +231,29 @@ const ReaderdetailsBorrowings = () => {
 
       <Modal isOpen={isModalOpen} onClose={handleModalClose} onSave={handleModalSave}>
         <h2 className="text-xl font-bold mb-4">Dodaj wypożyczenie</h2>
-        <div className="mb-4">
-          <label htmlFor="book_id" className="block mb-2">Book ID:</label>
+        <div className="mb-4 relative">
+          <label htmlFor="book_title" className="block mb-2">Book Title:</label>
           <input
             type="text"
-            id="book_id"
-            name="book_id"
-            value={newBorrowing.book_id}
-            onChange={handleInputChange}
+            id="book_title"
+            name="book_title"
+            value={bookTitle}
+            onChange={handleBookSearchChange}
             className="w-full p-2 border rounded"
           />
+          {bookSearchResults.length > 0 && (
+            <ul className="absolute border rounded max-h-48 overflow-y-auto bg-white w-full z-10 rounded-tr-none rounded-tl-none -mt-[2px]">
+              {bookSearchResults.map((book) => (
+                <li
+                  key={book.id}
+                  onClick={() => handleBookSelect(book)}
+                  className="cursor-pointer p-2 hover:bg-gray-200"
+                >
+                  {book.title}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="mb-4">
           <label htmlFor="borrowing_date" className="block mb-2">Borrowing Date:</label>
