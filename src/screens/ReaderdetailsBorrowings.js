@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
-import { IoIosArrowBack } from "react-icons/io";
-import { MdArrowForwardIos } from "react-icons/md";
+import { IoIosArrowBack, IoIosReturnLeft } from "react-icons/io";
+import { MdWatchLater } from "react-icons/md";
 import { LuBookPlus } from "react-icons/lu";
 import Modal from '../components/Modal';
+import { FaBookReader } from "react-icons/fa";
 
 const ReaderdetailsBorrowings = () => {
   const { id } = useParams();
@@ -15,15 +16,27 @@ const ReaderdetailsBorrowings = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [borrowingsPerPage] = useState(8);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [isProlongationModalOpen, setIsProlongationModalOpen] = useState(false);
   const [newBorrowing, setNewBorrowing] = useState({
     book_id: '',
     borrowing_date: '',
     realreturndate: '',
     comments: ''
   });
+  const [returnBorrowing, setReturnBorrowing] = useState({
+    realreturndate: ''
+  });
+  const [prolongation, setProlongation] = useState({
+    prolongation: ''
+  });
+  const [selectedBorrowingId, setSelectedBorrowingId] = useState(null);
   const [bookSearchResults, setBookSearchResults] = useState([]);
   const [bookTitle, setBookTitle] = useState('');
+  const [filterStatus, setFilterStatus] = useState(null); // State to hold the filter status
+  const [sortField, setSortField] = useState('id'); // State to hold the sort field
+  const [sortOrder, setSortOrder] = useState('DESC'); // State to hold the sort order
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -50,7 +63,11 @@ const ReaderdetailsBorrowings = () => {
 
     const fetchBorrowings = async () => {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/user/${id}`, {
+      let url = `${process.env.REACT_APP_API_URL}/api/borrowingsbystatus/user/${id}?sortField=${sortField}&sortOrder=${sortOrder}`;
+      if (filterStatus) {
+        url += `&status=${filterStatus}`;
+      }
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -71,7 +88,7 @@ const ReaderdetailsBorrowings = () => {
 
     fetchUser();
     fetchBorrowings();
-  }, [id]);
+  }, [id, filterStatus, sortField, sortOrder]);
 
   const indexOfLastBorrowing = currentPage * borrowingsPerPage;
   const indexOfFirstBorrowing = indexOfLastBorrowing - borrowingsPerPage;
@@ -81,14 +98,26 @@ const ReaderdetailsBorrowings = () => {
   const navigate = useNavigate();
 
   const handleAddBorrowingClick = () => {
-    setIsModalOpen(true);
+    setIsAddModalOpen(true);
+  };
+
+  const handleReturnBorrowingClick = (borrowingId) => {
+    setSelectedBorrowingId(borrowingId);
+    setIsReturnModalOpen(true);
+  };
+
+  const handleProlongationClick = (borrowingId) => {
+    setSelectedBorrowingId(borrowingId);
+    setIsProlongationModalOpen(true);
   };
 
   const handleModalClose = () => {
-    setIsModalOpen(false);
+    setIsAddModalOpen(false);
+    setIsReturnModalOpen(false);
+    setIsProlongationModalOpen(false);
   };
 
-  const handleModalSave = async () => {
+  const handleAddBorrowingSave = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/readerdetails/${id}/borrow`, {
       method: 'POST',
@@ -98,7 +127,7 @@ const ReaderdetailsBorrowings = () => {
       },
       body: JSON.stringify(newBorrowing)
     });
-  
+
     if (response.ok) {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/user/${id}`, {
         method: 'GET',
@@ -117,7 +146,7 @@ const ReaderdetailsBorrowings = () => {
           text: 'Failed to fetch borrowings data',
         });
       }
-      setIsModalOpen(false);
+      setIsAddModalOpen(false);
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -132,9 +161,107 @@ const ReaderdetailsBorrowings = () => {
     }
   };
 
+  const handleReturnBorrowingSave = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/${selectedBorrowingId}/realreturndate`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(returnBorrowing)
+    });
+
+    if (response.ok) {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/user/${id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBorrowings(data);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to fetch borrowings data',
+        });
+      }
+      setIsReturnModalOpen(false);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Return date updated successfully',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to update return date',
+      });
+    }
+  };
+
+  const handleProlongationSave = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/${selectedBorrowingId}/prolongation`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(prolongation)
+    });
+
+    if (response.ok) {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/user/${id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBorrowings(data);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to fetch borrowings data',
+        });
+      }
+      setIsProlongationModalOpen(false);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Prolongation updated successfully',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to update prolongation',
+      });
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewBorrowing({ ...newBorrowing, [name]: value });
+  };
+
+  const handleReturnInputChange = (e) => {
+    const { name, value } = e.target;
+    setReturnBorrowing({ ...returnBorrowing, [name]: value });
+  };
+
+  const handleProlongationInputChange = (e) => {
+    const { name, value } = e.target;
+    setProlongation({ ...prolongation, [name]: value });
   };
 
   const handleBookSearchChange = async (e) => {
@@ -166,6 +293,19 @@ const ReaderdetailsBorrowings = () => {
     setBookSearchResults([]);
   };
 
+  const handleFilterStatus = (status) => {
+    setFilterStatus(status);
+    setCurrentPage(1); // Reset to first page when applying a filter
+  };
+
+  const handleSortChange = (e) => {
+    setSortField(e.target.value);
+  };
+
+  const handleSortOrderChange = () => {
+    setSortOrder((prevOrder) => (prevOrder === 'ASC' ? 'DESC' : 'ASC'));
+  };
+
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff]">
       <Menu />
@@ -193,12 +333,54 @@ const ReaderdetailsBorrowings = () => {
             <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">
               <div className="mx-auto">
                 <div className="flex justify-between items-center mb-4 gap-4 items-center">
-                  <h2 className="text-2xl font-bold">Ostatnie wypożyczenia</h2>
+                  <h2 className="text-2xl font-bold">Wypożyczenia</h2>
                   <button
                     onClick={handleAddBorrowingClick}
                     className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
                   >
                     Dodaj wypożyczenie <LuBookPlus />
+                  </button>
+                </div>
+                <div className="flex items-center mb-4 gap-4 items-center">
+                  <p className="">Pokaż tylko</p>
+                  <div className='flex gap-5'>
+                    <button
+                      onClick={() => handleFilterStatus(null)}
+                      className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                    >
+                      Wszystkie <FaBookReader />
+                    </button>
+                    <button
+                      onClick={() => handleFilterStatus('returned')}
+                      className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                    >
+                      Zwrócone <IoIosReturnLeft />
+                    </button>
+                    <button
+                      onClick={() => handleFilterStatus('pending')}
+                      className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                    >
+                      Wypożyczone <FaBookReader />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center mb-4 gap-4 items-center">
+                  <label htmlFor="sortField" className="block">Sortuj po:</label>
+                  <select
+                    id="sortField"
+                    value={sortField}
+                    onChange={handleSortChange}
+                    className="p-2 border rounded"
+                  >
+                    <option value="id">ID</option>
+                    <option value="borrowing_date">Data wypożyczenia</option>
+                    <option value="status">Status</option>
+                  </select>
+                  <button
+                    onClick={handleSortOrderChange}
+                    className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                  >
+                    {sortOrder === 'ASC' ? 'Rosnąco' : 'Malejąco'}
                   </button>
                 </div>
                 {currentBorrowings.map((borrowing) => (
@@ -210,24 +392,23 @@ const ReaderdetailsBorrowings = () => {
                       <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
                       <p className="text-gray-600">Autor: <strong>{borrowing.book?.author}</strong></p>
                       <p className="text-gray-600">Borrowing Date: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
-                      <p className="text-gray-600">Return Date: <strong className={`${borrowing.realreturndate === "-0001-11-30" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.realreturndate === "-0001-11-30" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
+                      <p className="text-gray-600">Return Date: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
                       <p className="text-gray-600">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
                     </div>
                     <div className='w-2/12 gap-3 block'>
                         <button
-                        onClick={handleAddBorrowingClick}
-                        className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
-                      >
-                        Zwrot<LuBookPlus />
-                      </button>
-                      <button
-                        onClick={handleAddBorrowingClick}
-                        className="items-center justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
-                      >
-                        Prolongata<LuBookPlus />
-                      </button>
+                          onClick={() => handleReturnBorrowingClick(borrowing.id)}
+                          className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                        >
+                          Zwrot<IoIosReturnLeft />
+                        </button>
+                        <button
+                          onClick={() => handleProlongationClick(borrowing.id)}
+                          className="items-center justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                        >
+                          Prolongata<MdWatchLater />
+                        </button>
                     </div>
-                    
                   </div>
                 ))}
 
@@ -244,7 +425,7 @@ const ReaderdetailsBorrowings = () => {
         </div>
       </main>
 
-      <Modal isOpen={isModalOpen} onClose={handleModalClose} onSave={handleModalSave}>
+      <Modal isOpen={isAddModalOpen} onClose={handleModalClose} onSave={handleAddBorrowingSave}>
         <h2 className="text-xl font-bold mb-4">Dodaj wypożyczenie</h2>
         <div className="mb-4 relative">
           <label htmlFor="book_title" className="block mb-2">Book Title:</label>
@@ -299,6 +480,36 @@ const ReaderdetailsBorrowings = () => {
             name="comments"
             value={newBorrowing.comments}
             onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      </Modal>
+
+      <Modal isOpen={isReturnModalOpen} onClose={handleModalClose} onSave={handleReturnBorrowingSave}>
+        <h2 className="text-xl font-bold mb-4">Update Return Date</h2>
+        <div className="mb-4">
+          <label htmlFor="realreturndate" className="block mb-2">Return Date:</label>
+          <input
+            type="date"
+            id="realreturndate"
+            name="realreturndate"
+            value={returnBorrowing.realreturndate}
+            onChange={handleReturnInputChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      </Modal>
+
+      <Modal isOpen={isProlongationModalOpen} onClose={handleModalClose} onSave={handleProlongationSave}>
+        <h2 className="text-xl font-bold mb-4">Update Prolongation Date</h2>
+        <div className="mb-4">
+          <label htmlFor="prolongation" className="block mb-2">Prolongation Date:</label>
+          <input
+            type="date"
+            id="prolongation"
+            name="prolongation"
+            value={prolongation.prolongation}
+            onChange={handleProlongationInputChange}
             className="w-full p-2 border rounded"
           />
         </div>
