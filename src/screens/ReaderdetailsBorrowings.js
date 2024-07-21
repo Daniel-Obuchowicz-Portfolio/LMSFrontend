@@ -206,13 +206,28 @@ const ReaderdetailsBorrowings = () => {
                     <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
                       <img className="w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
                     </div>
-                    <div className="md:w-11/12 md:pl-4">
+                    <div className="md:w-9/12 md:pl-4">
                       <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
                       <p className="text-gray-600">Autor: <strong>{borrowing.book?.author}</strong></p>
                       <p className="text-gray-600">Borrowing Date: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
-                      <p className="text-gray-600">Return Date: <strong className='bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'>{borrowing.realreturndate === "-0001-11-30 00:00:00" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
+                      <p className="text-gray-600">Return Date: <strong className={`${borrowing.realreturndate === "-0001-11-30" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.realreturndate === "-0001-11-30" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
                       <p className="text-gray-600">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
                     </div>
+                    <div className='w-2/12 gap-3 block'>
+                        <button
+                        onClick={handleAddBorrowingClick}
+                        className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      >
+                        Zwrot<LuBookPlus />
+                      </button>
+                      <button
+                        onClick={handleAddBorrowingClick}
+                        className="items-center justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      >
+                        Prolongata<LuBookPlus />
+                      </button>
+                    </div>
+                    
                   </div>
                 ))}
 
