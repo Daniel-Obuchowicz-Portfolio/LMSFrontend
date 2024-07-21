@@ -35,6 +35,7 @@ const ReaderdetailsBorrowings = () => {
   const [bookSearchResults, setBookSearchResults] = useState([]);
   const [bookTitle, setBookTitle] = useState('');
   const [filterStatus, setFilterStatus] = useState(null); // State to hold the filter status
+  const [activeFilter, setActiveFilter] = useState('all'); // State to track the active filter button
   const [sortField, setSortField] = useState('id'); // State to hold the sort field
   const [sortOrder, setSortOrder] = useState('DESC'); // State to hold the sort order
 
@@ -293,8 +294,9 @@ const ReaderdetailsBorrowings = () => {
     setBookSearchResults([]);
   };
 
-  const handleFilterStatus = (status) => {
+  const handleFilterStatus = (status, filter) => {
     setFilterStatus(status);
+    setActiveFilter(filter);
     setCurrentPage(1); // Reset to first page when applying a filter
   };
 
@@ -345,20 +347,20 @@ const ReaderdetailsBorrowings = () => {
                   <p className="">Pokaż tylko</p>
                   <div className='flex gap-5'>
                     <button
-                      onClick={() => handleFilterStatus(null)}
-                      className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      onClick={() => handleFilterStatus(null, 'all')}
+                      className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                     >
                       Wszystkie <FaBookReader />
                     </button>
                     <button
-                      onClick={() => handleFilterStatus('returned')}
-                      className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      onClick={() => handleFilterStatus('returned', 'returned')}
+                      className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                     >
                       Zwrócone <IoIosReturnLeft />
                     </button>
                     <button
-                      onClick={() => handleFilterStatus('pending')}
-                      className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      onClick={() => handleFilterStatus('pending', 'pending')}
+                      className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                     >
                       Wypożyczone <FaBookReader />
                     </button>
@@ -395,7 +397,7 @@ const ReaderdetailsBorrowings = () => {
                       <p className="text-gray-600">Return Date: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
                       <p className="text-gray-600">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
                     </div>
-                    <div className='w-2/12 gap-3 block'>
+                    <div className='w-2/12 gap-3 block content-center'>
                         <button
                           onClick={() => handleReturnBorrowingClick(borrowing.id)}
                           className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"

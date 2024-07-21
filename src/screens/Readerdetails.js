@@ -39,7 +39,7 @@ const Readerdetails = () => {
 
     const fetchBorrowings = async () => {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/user/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/5/user/${id}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -172,22 +172,19 @@ const Readerdetails = () => {
                   </div>
                   {borrowings.map((borrowing) => (
                     <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded">
-                      <div className="md:w-1/4 flex justify-center md:justify-start mb-4 md:mb-0">
+                      <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
                         <img className="w-full object-cover" src={borrowing.book.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book.title} />
                       </div>
-                      <div className="md:w-3/4 md:pl-4">
+                      <div className="md:w-11/12 md:pl-4">
                         <h2 className="font-bold text-2xl mb-3">{borrowing.book.title}</h2>
                         <p className="text-gray-600 mb-1">Autor: <strong>{borrowing.book.author}</strong></p>
-                        <p className="text-gray-600 mb-1">Borrowing Date: <strong>{new Date(borrowing.borrowing_date.date).toLocaleDateString()}</strong></p>
-                        <p className="text-gray-600 mb-1">Return Date: <strong className='bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'>{borrowing.realreturndate.date === "-0001-11-30 00:00:00.000000" ? "Not Returned" : new Date(borrowing.realreturndate.date).toLocaleDateString()}</strong></p>
-                        <p className="text-gray-600 mb-1">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">
+            <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4 h-min">
               <div className="mx-auto">
                 <h2 className="text-2xl font-bold mb-4">Edit Information</h2>
                 <form onSubmit={handleSubmit}>

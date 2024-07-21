@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
@@ -9,6 +9,7 @@ import { MdArrowForwardIos } from "react-icons/md";
 const BookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState(null);
+  const [borrowings, setBorrowings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
@@ -36,7 +37,29 @@ const BookDetails = () => {
       setIsLoading(false);
     };
 
+    const fetchBorrowings = async () => {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/borrowings/book/${id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBorrowings(data);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to fetch borrowings data',
+        });
+      }
+    };
+
     fetchBook();
+    fetchBorrowings();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -108,13 +131,13 @@ const BookDetails = () => {
           <div className="flex">
             <div className="w-2/5">
               <div className="bg-white shadow-md rounded p-6 h-fit">
-              <h2 className="text-xl font-bold mb-4 text-left">Szybkie info</h2>
+                <h2 className="text-xl font-bold mb-4 text-left">Szybkie info</h2>
                 <div className="flex flex-col items-center mb-4">
                   <div className='px-4'>
-                      <div className='w-[140px] bg-[#ffffff] rounded-[4px]'>
-                        <img className='w-[132px] object-cover rounded-[4px] mb-3' src={book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={book?.title} />
-                      </div>
+                    <div className='w-[140px] bg-[#ffffff] rounded-[4px]'>
+                      <img className='w-[132px] object-cover rounded-[4px] mb-3' src={book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={book?.title} />
                     </div>
+                  </div>
                   <h3 className="text-xl font-bold">{book?.title}</h3>
                   <p className="text-gray-600">Author: {book?.author}</p>
                 </div>
@@ -125,7 +148,28 @@ const BookDetails = () => {
                     <h2 className="text-xl font-bold mb-4 text-left">Ostatnie wypożyczenia</h2>
                   </div>
                   <div className=''>
-                      <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>Powrót <MdArrowForwardIos /></button>
+                    <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>Powrót <MdArrowForwardIos /></button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <div className="min-w-full bg-white shadow-md rounded-lg">
+                    <div className="p-2">
+                      
+                      {borrowings.map(borrowing => (
+                        <div key={borrowing.id} className="grid grid-cols-2 gap-4 text-left py-2">
+                          <div className="flex gap-5">
+                            <img src={borrowing.user.profile_picture} alt={`${borrowing.user.first_name}'s profile`} className="inline-block relative object-center rounded-full w-12 h-12 border border-blue-gray-50 bg-blue-gray-50/50 object-cover" />
+                            <div className='flex items-center	'>
+                            {borrowing.user.first_name} {borrowing.user.last_name}
+                            </div>
+                          </div>
+                          <div className="block">
+                            <div className="">{borrowing.user.email}</div>
+                            <div className="">{borrowing.user.phone_number}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
