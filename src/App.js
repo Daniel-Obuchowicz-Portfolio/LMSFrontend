@@ -9,6 +9,7 @@ import Books from './screens/Books';
 import BookDetails from './screens/Bookdetails';
 import ReaderAdd from './screens/ReaderAdd';
 import BookAdd from './screens/BookAdd';
+import Search from './screens/Search';
 import ReaderdetailsBorrowings from './screens/ReaderdetailsBorrowings';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/books" element={<Books />} />
       <Route path="/bookdetails/:id" element={<BookDetails />} />
       <Route path="/book/add" element={<BookAdd />} />
+      <Route path="/search" element={<Search />} />
     </Routes>
   );
 }

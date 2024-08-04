@@ -4,6 +4,7 @@ import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
+import Footer from '../components/Footer';
 
 const BookAdd = () => {
   const { id } = useParams();
@@ -193,6 +194,7 @@ const submitBookData = async (bookData, token) => {
             </div>
           </div>
         </div>
+        <Footer />
       </main>
     </div>
   );

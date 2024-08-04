@@ -8,6 +8,7 @@ import { MdOutlineMail, MdLocalPhone  } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoPerson } from "react-icons/io5";
 import { BsCalendarDate } from "react-icons/bs";
+import Footer from '../components/Footer';
 
 
 
@@ -114,7 +115,7 @@ const Books = () => {
           <div className="mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {currentBooks.map(book => (
-                <div key={book.id} className="bg-white shadow-md rounded">
+                <div key={book.id} className="bg-white shadow-md rounded transition-transform transform hover:scale-105">
                   <div className="pt-[30%] bg-cover bg-[url('https://elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-e1464023124869.jpeg')] rounded"></div>
                   <div className='px-4'>
                     <div className='w-[100px] bg-[#ffffff] mr-auto mt-[-25%] rounded-[4px]'>
@@ -143,6 +144,7 @@ const Books = () => {
             />
           </div>
         </div>
+        <Footer />
       </main>
     </div>
   );

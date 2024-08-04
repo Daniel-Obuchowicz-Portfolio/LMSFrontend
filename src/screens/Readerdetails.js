@@ -5,6 +5,7 @@ import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
 import { MdArrowForwardIos } from "react-icons/md";
+import Footer from '../components/Footer';
 
 const Readerdetails = () => {
   const { id } = useParams();
@@ -168,7 +169,7 @@ const Readerdetails = () => {
                 <div className="flex flex-col mb-4">
                 <div className='flex justify-between items-center'>
                   <h2 className="text-2xl font-bold mb-4">Ostatnie wypożyczenia</h2>
-                  <Link to={`/readerdetails/${user?.id}/borrowings`} class="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Zobacz wszystkie <MdArrowForwardIos /></Link>
+                  <Link to={`/readerdetails/${user?.id}/borrowings`} className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Zobacz wszystkie <MdArrowForwardIos /></Link>
                   </div>
                   {borrowings.map((borrowing) => (
                     <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded">
@@ -277,6 +278,7 @@ const Readerdetails = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </main>
     </div>
   );

@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from "react-icons/io";
 import { MdOutlineMail, MdLocalPhone  } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
+import Footer from '../components/Footer';
 
 
 
@@ -133,7 +134,7 @@ const Readers = () => {
           <div className=" mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {currentUsers.map(user => (
-                  <div key={user.id} className="bg-white shadow-md rounded">
+                  <div key={user.id} className="bg-white shadow-md rounded transition-transform transform hover:scale-105">
                     <div className="pt-[30%] bg-cover bg-[url(https://elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-e1464023124869.jpeg)] rounded"></div>
                     <div className='w-[140px] rounded-full bg-[#ffffff] mx-auto mt-[-25%] border-4 border-[#ef4444]'>
                       <img className='w-[132px] h-[132px] object-cover rounded-full' src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user.first_name} ${user.last_name}`} />
@@ -157,6 +158,7 @@ const Readers = () => {
               />
             </div>
         </div>
+        <Footer />
       </main>
     </div>
   );

@@ -5,6 +5,7 @@ import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
 import { MdArrowForwardIos } from "react-icons/md";
+import Footer from '../components/Footer';
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -143,38 +144,52 @@ const BookDetails = () => {
                 </div>
               </div>
               <div className="bg-white shadow-md rounded p-6 h-fit mt-5">
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between">
                   <div className=''>
-                    <h2 className="text-xl font-bold mb-4 text-left">Ostatnie wypożyczenia</h2>
+                    <h2 className="text-xl font-bold text-left">Ostatnie wypożyczenia</h2>
                   </div>
                   <div className=''>
-                    <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>Powrót <MdArrowForwardIos /></button>
+
                   </div>
                 </div>
-                <div className="overflow-x-auto">
-                  <div className="min-w-full bg-white shadow-md rounded-lg">
-                    <div className="p-2">
-                      
-                      {borrowings.map(borrowing => (
-                        <div key={borrowing.id} className="grid grid-cols-2 gap-4 text-left py-2">
-                          <div className="flex gap-5">
-                            <img src={borrowing.user.profile_picture} alt={`${borrowing.user.first_name}'s profile`} className="inline-block relative object-center rounded-full w-12 h-12 border border-blue-gray-50 bg-blue-gray-50/50 object-cover" />
-                            <div className='flex items-center	'>
+                <div className="min-w-full ">
+                  {borrowings.map(borrowing => (
+                    <div key={borrowing.id} className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4 border-b border-gray-200">
+                      <div className="flex items-center gap-6">
+                        <img
+                          src={borrowing.user.profile_picture}
+                          alt={`${borrowing.user.first_name}'s profile`}
+                          className="rounded-full w-16 h-16 border border-gray-300 object-cover shadow-lg"
+                        />
+                        <div>
+                          <div className="text-lg font-semibold text-blue-900">
                             {borrowing.user.first_name} {borrowing.user.last_name}
-                            </div>
                           </div>
-                          <div className="block">
-                            <div className="">{borrowing.user.email}</div>
-                            <div className="">{borrowing.user.phone_number}</div>
+                          <div className="text-sm text-gray-700">
+                            {borrowing.user.email}
+                          </div>
+                          <div className="text-sm text-gray-700">
+                            {borrowing.user.phone_number}
                           </div>
                         </div>
-                      ))}
+                      </div>
+                      <div className="flex flex-col justify-center bg-blue-100 p-4 rounded-lg shadow-inner">
+                        <div className="text-gray-800">
+                          <span className="font-medium text-blue-600">Borrow Date:</span> {new Date(borrowing.borrowing_date).toLocaleDateString()}
+                        </div>
+                        <div className="text-gray-800">
+                          <span className="font-medium text-blue-600">Return Date:</span> {new Date(borrowing.realreturndate).toLocaleDateString()}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
+
+
+
               </div>
             </div>
-            <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">
+            <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4 h-fit">
               <div className="mx-auto">
                 <h2 className="text-2xl font-bold mb-4">Informacje o książce</h2>
                 <form onSubmit={handleSubmit}>
@@ -274,6 +289,7 @@ const BookDetails = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </main>
     </div>
   );

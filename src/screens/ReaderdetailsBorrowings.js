@@ -8,6 +8,7 @@ import { MdWatchLater } from "react-icons/md";
 import { LuBookPlus } from "react-icons/lu";
 import Modal from '../components/Modal';
 import { FaBookReader } from "react-icons/fa";
+import Footer from '../components/Footer';
 
 const ReaderdetailsBorrowings = () => {
   const { id } = useParams();

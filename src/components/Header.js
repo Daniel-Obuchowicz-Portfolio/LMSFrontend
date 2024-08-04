@@ -63,23 +63,6 @@ const Menu = () => {
                     {/* More dropdowns similar to the one above */}
                 </ul>
 
-                {/* Banner */}
-                <div className="px-4 box-banner">
-                    <div className="my-8 p-4 text-center bg-white rounded-lg">
-                        <h4 className="font-bold inline-block mb-2">Sales Report</h4>
-                        <div className="mb-3 text-sm">
-                            Monthly sales report is ready for download!
-                        </div>
-                        <div className="grid">
-                            <a
-                                href="landing.html"
-                                className="py-2 px-4 inline-block text-center mb-3 rounded leading-5 text-gray-100 bg-pink-500 border border-pink-500 hover:text-white hover:bg-pink-600 focus:bg-pink-600 focus:outline-none"
-                            >
-                                Download
-                            </a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </aside >
     );
