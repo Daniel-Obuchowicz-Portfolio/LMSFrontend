@@ -12,7 +12,7 @@ import { IoIosArrowBack } from "react-icons/io";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Skeleton = ({ width, height }) => (
-  <div style={{ width, height, backgroundColor: '#e0e0e0' }} className="rounded animate-pulse"></div>
+  <div style={{ width, height, backgroundColor: '#e0e0e0' }} className="rounded animate-pulse m-3 mx-0"></div>
 );
 
 const StatsChart = ({ borrowData, readersData, title }) => {
@@ -75,6 +75,7 @@ const Dashboard = () => {
         setBorrowData(data);
       } else {
         console.error('Failed to fetch borrow data');
+        navigate('/login');
       }
       setIsLoading(false);
     };

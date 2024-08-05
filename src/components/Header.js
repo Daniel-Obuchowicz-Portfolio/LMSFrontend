@@ -5,6 +5,8 @@ import { Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
 import { HiUserAdd } from "react-icons/hi";
 import { BiSolidBookAdd } from "react-icons/bi";
+import { CiSearch } from "react-icons/ci";
+
 
 
 
@@ -57,6 +59,11 @@ const Menu = () => {
                     <li className="relative text-white">
                         <Link to={`/book/add`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
                             <span className="flex items-center gap-3"> <BiSolidBookAdd /> Nowa książka</span>
+                        </Link>
+                    </li>
+                    <li className="relative text-white">
+                        <Link to={`/search`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
+                            <span className="flex items-center gap-3"> <CiSearch /> Wyszukiwanie</span>
                         </Link>
                     </li>
 
