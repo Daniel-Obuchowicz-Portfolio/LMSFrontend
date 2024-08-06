@@ -278,7 +278,7 @@ const Search = () => {
                   ))}
                 </ul>
                 <button
-                  className="mt-4 w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 absolute bottom-[1rem] w-[92%] "
+                  className="mt-4 py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 absolute bottom-[1rem] w-[92%] "
                   onClick={clearRecentSearches}
                 >
                   Wyczyść wszystko

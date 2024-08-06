@@ -115,7 +115,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchOverdueBooks = async () => {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/filteredBorrowings`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/filteredBorrowingsfive`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -340,7 +340,7 @@ const Dashboard = () => {
             <div className="bg-white p-4 rounded-lg shadow-md">
               <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-2xl">Nowości w księgozbiorach</h2>
-                <a href="#" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Zobacz wszystkie <MdArrowForwardIos /></a>
+                <Link to="/books" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Zobacz wszystkie <MdArrowForwardIos /></Link>
               </div>
               {isLoading ? (
                 <Skeleton width="100%" height="200px" />
@@ -414,7 +414,8 @@ const Dashboard = () => {
             <div className="bg-white p-4 rounded-lg shadow-md">
               <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-2xl">Zaległości</h2>
-                <a href="#" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Zobacz wszystkie <MdArrowForwardIos /></a>
+                <Link to="/delays" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Zobacz wszystkie <MdArrowForwardIos /></Link>
+              
               </div>
               {isLoading ? (
                 <Skeleton width="100%" height="200px" />

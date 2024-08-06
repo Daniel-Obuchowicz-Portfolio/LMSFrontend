@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaHome, FaBookReader } from 'react-icons/fa';
+import { FaHome, FaBookReader, FaRegCalendarTimes } from 'react-icons/fa';
 import { TbBooks } from "react-icons/tb";
 import { Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
@@ -64,6 +64,11 @@ const Menu = () => {
                     <li className="relative text-white">
                         <Link to={`/search`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
                             <span className="flex items-center gap-3"> <CiSearch /> Wyszukiwanie</span>
+                        </Link>
+                    </li>
+                    <li className="relative text-white">
+                        <Link to={`/delays`} className="block py-2.5 px-6 text-white hover:text-indigo-500 dark:hover:text-indigo-400">
+                            <span className="flex items-center gap-3"> <FaRegCalendarTimes /> Zaległości</span>
                         </Link>
                     </li>
 

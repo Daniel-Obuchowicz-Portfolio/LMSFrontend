@@ -11,6 +11,7 @@ import ReaderAdd from './screens/ReaderAdd';
 import BookAdd from './screens/BookAdd';
 import Search from './screens/Search';
 import ReaderdetailsBorrowings from './screens/ReaderdetailsBorrowings';
+import Delays from './screens/Delays';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path="/bookdetails/:id" element={<BookDetails />} />
       <Route path="/book/add" element={<BookAdd />} />
       <Route path="/search" element={<Search />} />
+      <Route path="/delays" element={<Delays />} />
     </Routes>
   );
 }
