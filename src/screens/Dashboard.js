@@ -220,7 +220,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="flex-1 pl-[16rem]">
         <TopHeader />
-        <div className="p-6">
+        <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <h1 className="text-xl font-bold">Dashboard</h1>
           </div>

@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
 import { MdArrowForwardIos } from "react-icons/md";
 import Footer from '../components/Footer';
+import { FaInfoCircle } from 'react-icons/fa';
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -122,7 +123,7 @@ const BookDetails = () => {
       <Menu />
       <main className="flex-1 pl-[16rem]">
         <TopHeader />
-        <div className="p-6">
+        <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
@@ -144,46 +145,46 @@ const BookDetails = () => {
                 </div>
               </div>
               <div className="bg-white shadow-md rounded p-6 h-fit mt-5">
-                <div className="flex justify-between">
-                  <div className=''>
-                    <h2 className="text-xl font-bold text-left">Ostatnie wypożyczenia</h2>
-                  </div>
-                  <div className=''>
-
-                  </div>
+              <h2 className="text-xl font-bold text-left">Ostatnie wypożyczenia</h2>
+            {borrowings.length === 0 ? (
+                <div className="flex items-center justify-center text-gray-500 mt-8">
+                    <FaInfoCircle className="mr-2" />
+                    <span>Brak danych do wyświetlenia</span>
                 </div>
-                <div className="min-w-full ">
-                  {borrowings.map(borrowing => (
-                    <div key={borrowing.id} className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4 border-b border-gray-200">
-                      <div className="flex items-center gap-6">
-                        <img
-                          src={borrowing.user.profile_picture}
-                          alt={`${borrowing.user.first_name}'s profile`}
-                          className="rounded-full w-16 h-16 border border-gray-300 object-cover shadow-lg"
-                        />
-                        <div>
-                          <div className="text-lg font-semibold text-blue-900">
-                            {borrowing.user.first_name} {borrowing.user.last_name}
-                          </div>
-                          <div className="text-sm text-gray-700">
-                            {borrowing.user.email}
-                          </div>
-                          <div className="text-sm text-gray-700">
-                            {borrowing.user.phone_number}
-                          </div>
+            ) : (
+                <div className="min-w-full">
+                    {borrowings.map(borrowing => (
+                        <div key={borrowing.id} className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4 border-b border-gray-200">
+                            <div className="flex items-center gap-6">
+                                <img
+                                    src={borrowing.user.profile_picture}
+                                    alt={`${borrowing.user.first_name}'s profile`}
+                                    className="rounded-full w-16 h-16 border border-gray-300 object-cover shadow-lg"
+                                />
+                                <div>
+                                    <div className="text-lg font-semibold text-blue-900">
+                                        {borrowing.user.first_name} {borrowing.user.last_name}
+                                    </div>
+                                    <div className="text-sm text-gray-700">
+                                        {borrowing.user.email}
+                                    </div>
+                                    <div className="text-sm text-gray-700">
+                                        {borrowing.user.phone_number}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-col justify-center bg-blue-100 p-4 rounded-lg shadow-inner">
+                                <div className="text-gray-800">
+                                    <span className="font-medium text-blue-600">Borrow Date:</span> {new Date(borrowing.borrowing_date).toLocaleDateString()}
+                                </div>
+                                <div className="text-gray-800">
+                                    <span className="font-medium text-blue-600">Return Date:</span> {new Date(borrowing.realreturndate).toLocaleDateString()}
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col justify-center bg-blue-100 p-4 rounded-lg shadow-inner">
-                        <div className="text-gray-800">
-                          <span className="font-medium text-blue-600">Borrow Date:</span> {new Date(borrowing.borrowing_date).toLocaleDateString()}
-                        </div>
-                        <div className="text-gray-800">
-                          <span className="font-medium text-blue-600">Return Date:</span> {new Date(borrowing.realreturndate).toLocaleDateString()}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
+            )}
 
 
 

@@ -7,7 +7,7 @@ import { IoIosArrowBack, IoIosReturnLeft } from "react-icons/io";
 import { MdWatchLater } from "react-icons/md";
 import { LuBookPlus } from "react-icons/lu";
 import Modal from '../components/Modal';
-import { FaBookReader } from "react-icons/fa";
+import { FaBookReader, FaInfoCircle } from "react-icons/fa";
 import Footer from '../components/Footer';
 
 const ReaderdetailsBorrowings = () => {
@@ -314,7 +314,7 @@ const ReaderdetailsBorrowings = () => {
       <Menu />
       <main className="flex-1 pl-[16rem]">
         <TopHeader />
-        <div className="p-6">
+        <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
@@ -335,93 +335,115 @@ const ReaderdetailsBorrowings = () => {
             </div>
             <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">
               <div className="mx-auto">
-                <div className="flex justify-between items-center mb-4 gap-4 items-center">
-                  <h2 className="text-2xl font-bold">Wypożyczenia</h2>
-                  <button
-                    onClick={handleAddBorrowingClick}
-                    className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
-                  >
-                    Dodaj wypożyczenie <LuBookPlus />
-                  </button>
-                </div>
-                <div className="flex items-center mb-4 gap-4 items-center">
-                  <p className="">Pokaż tylko</p>
-                  <div className='flex gap-5'>
-                    <button
-                      onClick={() => handleFilterStatus(null, 'all')}
-                      className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
-                    >
-                      Wszystkie <FaBookReader />
-                    </button>
-                    <button
-                      onClick={() => handleFilterStatus('returned', 'returned')}
-                      className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
-                    >
-                      Zwrócone <IoIosReturnLeft />
-                    </button>
-                    <button
-                      onClick={() => handleFilterStatus('pending', 'pending')}
-                      className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
-                    >
-                      Wypożyczone <FaBookReader />
-                    </button>
+                {borrowings.length === 0 ? (
+                  <div>
+                    <div className="flex justify-between items-center mb-4 gap-4">
+                      <h2 className="text-2xl font-bold">Wypożyczenia</h2>
+                      <button
+                        onClick={handleAddBorrowingClick}
+                        className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      >
+                        Dodaj wypożyczenie <LuBookPlus />
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-center text-gray-500 mt-8">
+                      <div>
+                        <FaInfoCircle className="mb-3 text-[5em] text-center mx-auto" />
+                        <span className="text-2xl">Brak danych do wyświetlenia</span>
+                      </div>
+                    </div>
+                    
                   </div>
-                </div>
-                <div className="flex items-center mb-4 gap-4 items-center">
-                  <label htmlFor="sortField" className="block">Sortuj po:</label>
-                  <select
-                    id="sortField"
-                    value={sortField}
-                    onChange={handleSortChange}
-                    className="p-2 border rounded"
-                  >
-                    <option value="id">ID</option>
-                    <option value="borrowing_date">Data wypożyczenia</option>
-                    <option value="status">Status</option>
-                  </select>
-                  <button
-                    onClick={handleSortOrderChange}
-                    className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
-                  >
-                    {sortOrder === 'ASC' ? 'Rosnąco' : 'Malejąco'}
-                  </button>
-                </div>
-                {currentBorrowings.map((borrowing) => (
-                  <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded">
-                    <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
-                      <img className="w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
+                ) : (
+                  <>
+                    <div className="flex justify-between items-center mb-4 gap-4">
+                      <h2 className="text-2xl font-bold">Wypożyczenia</h2>
+                      <button
+                        onClick={handleAddBorrowingClick}
+                        className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      >
+                        Dodaj wypożyczenie <LuBookPlus />
+                      </button>
                     </div>
-                    <div className="md:w-9/12 md:pl-4">
-                      <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
-                      <p className="text-gray-600">Autor: <strong>{borrowing.book?.author}</strong></p>
-                      <p className="text-gray-600">Borrowing Date: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
-                      <p className="text-gray-600">Return Date: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
-                      <p className="text-gray-600">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
-                    </div>
-                    <div className='w-2/12 gap-3 block content-center'>
+                    <div className="flex items-center mb-4 gap-4">
+                      <p>Pokaż tylko</p>
+                      <div className='flex gap-5'>
                         <button
-                          onClick={() => handleReturnBorrowingClick(borrowing.id)}
-                          className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                          onClick={() => handleFilterStatus(null, 'all')}
+                          className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
-                          Zwrot<IoIosReturnLeft />
+                          Wszystkie <FaBookReader />
                         </button>
                         <button
-                          onClick={() => handleProlongationClick(borrowing.id)}
-                          className="items-center justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                          onClick={() => handleFilterStatus('returned', 'returned')}
+                          className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
-                          Prolongata<MdWatchLater />
+                          Zwrócone <IoIosReturnLeft />
                         </button>
+                        <button
+                          onClick={() => handleFilterStatus('pending', 'pending')}
+                          className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
+                        >
+                          Wypożyczone <FaBookReader />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
-
-                <Pagination
-                  borrowingsPerPage={borrowingsPerPage}
-                  totalBorrowings={borrowings.length}
-                  paginate={paginate}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
+                    <div className="flex items-center mb-4 gap-4">
+                      <label htmlFor="sortField" className="block">Sortuj po:</label>
+                      <select
+                        id="sortField"
+                        value={sortField}
+                        onChange={handleSortChange}
+                        className="p-2 border rounded"
+                      >
+                        <option value="id">ID</option>
+                        <option value="borrowing_date">Data wypożyczenia</option>
+                        <option value="status">Status</option>
+                      </select>
+                      <button
+                        onClick={handleSortOrderChange}
+                        className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                      >
+                        {sortOrder === 'ASC' ? 'Rosnąco' : 'Malejąco'}
+                      </button>
+                    </div>
+                    {currentBorrowings.map((borrowing) => (
+                      <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded">
+                        <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
+                          <img className="w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
+                        </div>
+                        <div className="md:w-9/12 md:pl-4">
+                          <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
+                          <p className="text-gray-600">Autor: <strong>{borrowing.book?.author}</strong></p>
+                          <p className="text-gray-600">Borrowing Date: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
+                          <p className="text-gray-600">Return Date: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
+                          <p className="text-gray-600">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
+                        </div>
+                        <div className='md:w-2/12 flex flex-col gap-3'>
+                          <button
+                            onClick={() => handleReturnBorrowingClick(borrowing.id)}
+                            className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                          >
+                            Zwrot <IoIosReturnLeft />
+                          </button>
+                          <button
+                            onClick={() => handleProlongationClick(borrowing.id)}
+                            className="items-center justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                          >
+                            Prolongata <MdWatchLater />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    <Pagination
+                      borrowingsPerPage={borrowingsPerPage}
+                      totalBorrowings={borrowings.length}
+                      paginate={paginate}
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>

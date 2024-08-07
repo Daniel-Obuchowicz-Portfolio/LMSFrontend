@@ -59,7 +59,7 @@ const submitBookData = async (bookData, token) => {
         Swal.fire({
             icon: 'success',
             title: 'Success',
-            text: 'User registered successfully',
+            text: 'Book addes successfully',
         });
     } else {
         Swal.fire({
@@ -75,7 +75,7 @@ const submitBookData = async (bookData, token) => {
       <Menu />
       <main className="flex-1 pl-[16rem]">
         <TopHeader />
-        <div className="p-6">
+        <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
