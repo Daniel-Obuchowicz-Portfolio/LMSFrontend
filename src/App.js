@@ -12,6 +12,7 @@ import BookAdd from './screens/BookAdd';
 import Search from './screens/Search';
 import ReaderdetailsBorrowings from './screens/ReaderdetailsBorrowings';
 import Delays from './screens/Delays';
+import Settings from './screens/Settings';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route path="/book/add" element={<BookAdd />} />
       <Route path="/search" element={<Search />} />
       <Route path="/delays" element={<Delays />} />
+      <Route path="/settings" element={<Settings />} />
     </Routes>
   );
 }

@@ -39,6 +39,7 @@ const ReaderdetailsBorrowings = () => {
   const [activeFilter, setActiveFilter] = useState('all'); // State to track the active filter button
   const [sortField, setSortField] = useState('id'); // State to hold the sort field
   const [sortOrder, setSortOrder] = useState('DESC'); // State to hold the sort order
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -97,7 +98,6 @@ const ReaderdetailsBorrowings = () => {
   const currentBorrowings = borrowings.slice(indexOfFirstBorrowing, indexOfLastBorrowing);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const navigate = useNavigate();
 
   const handleAddBorrowingClick = () => {
     setIsAddModalOpen(true);
@@ -310,7 +310,7 @@ const ReaderdetailsBorrowings = () => {
   };
 
   return (
-    <div className="min-h-screen flex font-montserrat bg-[#f6f5ff]">
+    <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-gray-200">
       <Menu />
       <main className="flex-1 pl-[16rem]">
         <TopHeader />
@@ -323,17 +323,17 @@ const ReaderdetailsBorrowings = () => {
           </div>
           <div className="flex">
             <div className="w-2/5">
-              <div className="bg-white shadow-md rounded p-6 h-fit mb-4">
+              <div className="bg-white shadow-md rounded p-6 h-fit mb-4 dark:bg-primary dark:border-gray-700">
                 <div className="flex flex-col items-center mb-4">
                   <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] mx-auto border-4 border-[#ef4444] mb-5'>
                     <img className="w-[132px] h-[132px] rounded-full mb-4 object-cover" src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user?.first_name} ${user?.last_name}`} />
                   </div>
                   <h3 className="text-xl font-bold">{user?.first_name} {user?.last_name}</h3>
-                  <p className="text-gray-600">{user?.email}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{user?.email}</p>
                 </div>
               </div>
             </div>
-            <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4">
+            <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4 dark:bg-primary dark:border-gray-700">
               <div className="mx-auto">
                 {borrowings.length === 0 ? (
                   <div>
@@ -394,7 +394,7 @@ const ReaderdetailsBorrowings = () => {
                         id="sortField"
                         value={sortField}
                         onChange={handleSortChange}
-                        className="p-2 border rounded"
+                        className="p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
                       >
                         <option value="id">ID</option>
                         <option value="borrowing_date">Data wypożyczenia</option>
@@ -408,16 +408,16 @@ const ReaderdetailsBorrowings = () => {
                       </button>
                     </div>
                     {currentBorrowings.map((borrowing) => (
-                      <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded">
+                      <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded dark:bg-gray-800 dark:border-gray-700">
                         <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
                           <img className="w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
                         </div>
                         <div className="md:w-9/12 md:pl-4">
                           <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
-                          <p className="text-gray-600">Autor: <strong>{borrowing.book?.author}</strong></p>
-                          <p className="text-gray-600">Borrowing Date: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
-                          <p className="text-gray-600">Return Date: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
-                          <p className="text-gray-600">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">Autor: <strong>{borrowing.book?.author}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">Borrowing Date: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">Return Date: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
                         </div>
                         <div className='md:w-2/12 flex flex-col gap-3'>
                           <button
@@ -460,15 +460,15 @@ const ReaderdetailsBorrowings = () => {
             name="book_title"
             value={bookTitle}
             onChange={handleBookSearchChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
           />
           {bookSearchResults.length > 0 && (
-            <ul className="absolute border rounded max-h-48 overflow-y-auto bg-white w-full z-10 rounded-tr-none rounded-tl-none -mt-[2px]">
+            <ul className="absolute border rounded max-h-48 overflow-y-auto bg-white dark:bg-gray-800 dark:text-gray-200 w-full z-10 rounded-tr-none rounded-tl-none -mt-[2px]">
               {bookSearchResults.map((book) => (
                 <li
                   key={book.id}
                   onClick={() => handleBookSelect(book)}
-                  className="cursor-pointer p-2 hover:bg-gray-200"
+                  className="cursor-pointer p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
                 >
                   {book.title}
                 </li>
@@ -484,7 +484,7 @@ const ReaderdetailsBorrowings = () => {
             name="borrowing_date"
             value={newBorrowing.borrowing_date}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
           />
         </div>
         <div className="mb-4">
@@ -495,7 +495,7 @@ const ReaderdetailsBorrowings = () => {
             name="realreturndate"
             value={newBorrowing.realreturndate}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
           />
         </div>
         <div className="mb-4">
@@ -505,7 +505,7 @@ const ReaderdetailsBorrowings = () => {
             name="comments"
             value={newBorrowing.comments}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
           />
         </div>
       </Modal>
@@ -520,7 +520,7 @@ const ReaderdetailsBorrowings = () => {
             name="realreturndate"
             value={returnBorrowing.realreturndate}
             onChange={handleReturnInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
           />
         </div>
       </Modal>
@@ -535,7 +535,7 @@ const ReaderdetailsBorrowings = () => {
             name="prolongation"
             value={prolongation.prolongation}
             onChange={handleProlongationInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
           />
         </div>
       </Modal>

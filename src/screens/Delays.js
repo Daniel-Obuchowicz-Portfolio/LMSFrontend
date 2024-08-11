@@ -14,7 +14,7 @@ const Delays = () => {
   const [overdueBooks, setOverdueBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [borrowingsPerPage] = useState(10); // You can set this to any number you like
+  const [borrowingsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchOverdueBooks = async () => {
@@ -28,7 +28,13 @@ const Delays = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setOverdueBooks(data);
+        if (data && typeof data === 'object') {
+          // Convert the object to an array using Object.values()
+          setOverdueBooks(Object.values(data));
+        } else {
+          console.error('Unexpected response format:', data);
+          setOverdueBooks([]); // Set to an empty array if the response is not an array
+        }
       } else {
         console.error('Failed to fetch overdue books data');
       }
@@ -43,7 +49,6 @@ const Delays = () => {
   const indexOfFirstItem = indexOfLastItem - borrowingsPerPage;
   const currentBorrowings = overdueBooks.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Function to change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
@@ -90,7 +95,7 @@ const Delays = () => {
                           </td>
                           <td className="p-2">
                             <div className="flex items-center gap-3">
-                              <img src={borrowing.user.profile_picture || 'https://taildash.tailwindDelays.com/src/img/avatar/avatar.png'} alt={`${borrowing.user.first_name}'s profile`} className="inline-block w-12 h-12 rounded-full border border-blue-gray-50 bg-blue-gray-50/50 object-cover p-0" />
+                              <img src={borrowing.user.profile_picture || '/img/profile-icon-design.jpg'} alt={`${borrowing.user.first_name}'s profile`} className="inline-block w-12 h-12 rounded-full border border-blue-gray-50 bg-blue-gray-50/50 object-cover p-0" />
                               <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">{borrowing.user.first_name} {borrowing.user.last_name}</p>
                             </div>
                           </td>

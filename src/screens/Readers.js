@@ -8,17 +8,15 @@ import { MdOutlineMail, MdLocalPhone  } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
 import Footer from '../components/Footer';
 
-
-
-
 const Readers = () => {
-
-
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,8 +31,10 @@ const Readers = () => {
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
+        setIsLoading(false);
       } else {
         console.error('Failed to fetch user data');
+        setIsLoading(false);
       }
     };
 
@@ -43,6 +43,7 @@ const Readers = () => {
 
   const fetchSearchResults = async (query) => {
     if (!query) return;
+    setIsLoading(true);
     const token = localStorage.getItem('token');
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/usersearch?query=${query}`, {
       method: 'GET',
@@ -58,6 +59,7 @@ const Readers = () => {
     } else {
       console.error('Failed to fetch search results');
     }
+    setIsLoading(false);
   };
 
   const handleSearchChange = (e) => {
@@ -66,6 +68,7 @@ const Readers = () => {
       setIsSearching(false);
       // Fetch users again when search query is cleared
       const fetchUsers = async () => {
+        setIsLoading(true);
         const token = localStorage.getItem('token');
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
           method: 'GET',
@@ -80,6 +83,7 @@ const Readers = () => {
         } else {
           console.error('Failed to fetch user data');
         }
+        setIsLoading(false);
       };
       fetchUsers();
     }
@@ -104,47 +108,65 @@ const Readers = () => {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const navigate = useNavigate();
-
 
   return (
-    <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] ">
+    <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800">
       <Menu />
-      {/* Main Content */}
       <main className="flex-1 pl-[16rem]">
-      <TopHeader/>
+        <TopHeader />
         <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-between items-center mb-4">
-          <div className="flex justify-left items-center mb-4 gap-4 items-center">
-            <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}><IoIosArrowBack /> Powrót</button> <h1 className="text-xl font-bold"> Czytelnicy</h1>
-          </div>
+            <div className="flex justify-left items-center mb-4 gap-4 items-center">
+              <button
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center"
+                onClick={() => navigate(-1)}
+                aria-label="Powrót"
+              >
+                <IoIosArrowBack /> Powrót
+              </button>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white"> Czytelnicy</h1>
+            </div>
             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="px-4 py-2 rounded-lg border border-gray-300 pr-10"
+                className="px-4 py-2 rounded-lg border border-gray-300 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
               />
-              <button type="submit" className="absolute right-3 text-gray-400">
+              <button type="submit" className="absolute right-3 text-gray-400" aria-label="Search">
                 <FaSearch />
               </button>
-              </form>
+            </form>
           </div>
-          <div className=" mx-auto">
+
+          {isLoading ? (
+            <div className="text-center text-gray-700 dark:text-gray-300">Loading...</div>
+          ) : (
+            <div className="mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {currentUsers.map(user => (
-                  <div key={user.id} className="bg-white shadow-md rounded transition-transform transform hover:scale-105">
+                  <div key={user.id} className="bg-white dark:bg-primary shadow-md rounded transition-transform transform hover:scale-105">
                     <div className="pt-[30%] bg-cover bg-[url(https://elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-e1464023124869.jpeg)] rounded"></div>
-                    <div className='w-[140px] rounded-full bg-[#ffffff] mx-auto mt-[-25%] border-4 border-[#ef4444]'>
-                      <img className='w-[132px] h-[132px] object-cover rounded-full' src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user.first_name} ${user.last_name}`} />
+                    <div className='w-[140px] rounded-full bg-[#ffffff] dark:bg-gray-900 mx-auto mt-[-25%] border-4 border-[#ef4444]'>
+                      <img
+                        className='w-[132px] h-[132px] object-cover rounded-full'
+                        src={user?.profile_picture || '/img/profile-icon-design.jpg'}
+                        alt={`${user.first_name} ${user.last_name}`}
+                      />
                     </div>
-      
+
                     <div className="p-4">
-                      <h3 className="text-2xl font-bold mb-1">{user.first_name} {user.last_name}</h3>
-                      <p className="mb-1 flex gap-3 items-center"><MdOutlineMail/> {user.email}</p>
-                      <p className="flex gap-3 items-center"><MdLocalPhone /> {user.phone_number}</p>
-                     <Link to={`/readerdetails/${user.id}`} className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Szczegóły <RiExternalLinkFill/> </Link>
+                      <h3 className="text-2xl font-bold mb-1 text-gray-900 dark:text-white">{user.first_name} {user.last_name}</h3>
+                      <p className="mb-1 flex gap-3 items-center text-gray-700 dark:text-gray-300"><MdOutlineMail /> {user.email}</p>
+                      <p className="flex gap-3 items-center text-gray-700 dark:text-gray-300"><MdLocalPhone /> {user.phone_number}</p>
+                      <Link
+                        to={`/readerdetails/${user.id}`}
+                        className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                        aria-label={`Details for ${user.first_name} ${user.last_name}`}
+                      >
+                        Szczegóły <RiExternalLinkFill />
+                      </Link>
                     </div>
                   </div>
                 ))}
@@ -157,6 +179,7 @@ const Readers = () => {
                 setCurrentPage={setCurrentPage}
               />
             </div>
+          )}
         </div>
         <Footer />
       </main>

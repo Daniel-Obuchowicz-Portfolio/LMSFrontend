@@ -4,7 +4,9 @@ import { TbBooks } from "react-icons/tb";
 import { Link, useLocation } from 'react-router-dom';
 import { HiUserAdd } from "react-icons/hi";
 import { BiSolidBookAdd } from "react-icons/bi";
-import { CiSearch } from "react-icons/ci";
+import { CiSearch  } from "react-icons/ci";
+import { IoSettingsSharp } from "react-icons/io5";
+
 
 const Menu = () => {
     const [sidebar, setSidebar] = useState(false);
@@ -18,6 +20,7 @@ const Menu = () => {
         { to: '/book/add', label: 'Nowa książka', icon: <BiSolidBookAdd /> },
         { to: '/search', label: 'Wyszukiwanie', icon: <CiSearch /> },
         { to: '/delays', label: 'Zaległości', icon: <FaRegCalendarTimes /> },
+        { to: '/settings', label: 'Ustawienia', icon: <IoSettingsSharp  /> },
     ];
 
     return (
