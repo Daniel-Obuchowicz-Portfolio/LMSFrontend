@@ -112,7 +112,7 @@ const Readers = () => {
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800">
       <Menu />
-      <main className="flex-1 pl-[16rem]">
+      <main className="flex-1 2xl:pl-[16rem]">
         <TopHeader />
         <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-between items-center mb-4">

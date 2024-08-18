@@ -21,7 +21,7 @@ const Settings = () => {
   return (
     <div className={`min-h-screen flex font-montserrat ${isDarkMode ? 'dark' : ''} bg-gray-100 dark:bg-gray-800 text-darkText dark:text-lightText transition-colors duration-300`}>
       <Menu />
-      <main className="flex-1 pl-[16rem]">
+      <main className="flex-1 2xl:pl-[16rem]">
         <TopHeader />
         <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
@@ -39,7 +39,9 @@ const Settings = () => {
                   countries={["US", "PL", "ES", "FR"]}
                   customLabels={{"US": "English", "PL": "Polski", "ES": "Español", "FR": "Français"}}
                   placeholder="Select Language"
-                  className="w-full bg-gray-50 dark:bg-secondary dark:text-lightText border-gray-300 dark:border-accent rounded-md"
+                  className="w-full bg-gray-50 dark:bg-secondary dark:text-lightText border-gray-300 dark:border-accent rounded-md dropdown-se"
+                  selectButtonClassName="bg-gray-50 dark:bg-gray-700 dark:text-white border-gray-300 dark:border-gray-600"
+                  selectMenuClassName="bg-gray-50 dark:bg-gray-700 dark:text-white border-gray-300 dark:border-gray-600"
                 />
               </div>
 

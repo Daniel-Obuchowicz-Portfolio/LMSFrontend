@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FaBars, FaSearch } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserData } from './userSlice';
@@ -13,7 +13,6 @@ const TopHeader = () => {
 
     const { isDarkMode, toggleDarkMode } = useDarkMode(); // Use dark mode context
     const [searchQuery, setSearchQuery] = useState('');
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMoreOptionsOpen, setIsMoreOptionsOpen] = useState(false);
 
     const wrapperRef = useRef(null);
@@ -47,7 +46,6 @@ const TopHeader = () => {
     useEffect(() => {
         function handleClickOutside(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                setIsSettingsOpen(false);
                 setIsMoreOptionsOpen(false);
             }
         }
@@ -95,17 +93,14 @@ const TopHeader = () => {
                     <div className="flex items-center space-x-[12px]">
                         <div className="border-l h-6 dark:border-gray-600"></div>
                         <div className="flex gap-[12px]">
-                            <button onClick={() => { setIsSettingsOpen(!isSettingsOpen); setIsMoreOptionsOpen(false); }}><img src="/img/settings_FILL0_wght300_GRAD0_opsz24.svg" alt="Settings" className="h-[20px] dark:invert" /></button>
-                            {isSettingsOpen && (
-                                <ul className={getDropdownClass()}>
-                                    <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">Change Language</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer" onClick={toggleDarkMode}>
-                                        {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                                    </li>
-                                </ul>
-                            )}
+                            {/* Redirect to settings */}
+                            <button onClick={() => navigate('/settings')}>
+                                <img src="/img/settings_FILL0_wght300_GRAD0_opsz24.svg" alt="Settings" className="h-[20px] dark:invert" />
+                            </button>
 
-                            <button onClick={() => { setIsMoreOptionsOpen(!isMoreOptionsOpen); setIsSettingsOpen(false); }}><img src="/img/more_vert_FILL0_wght300_GRAD0_opsz24.svg" alt="More options" className="h-[18px] dark:invert" /></button>
+                            <button onClick={() => { setIsMoreOptionsOpen(!isMoreOptionsOpen); }}>
+                                <img src="/img/more_vert_FILL0_wght300_GRAD0_opsz24.svg" alt="More options" className="h-[18px] dark:invert" />
+                            </button>
                             {isMoreOptionsOpen && (
                                 <ul className={getDropdownClass()}>
                                     <li className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer" onClick={handleLogout}>Log Out</li>

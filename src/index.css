@@ -22,3 +22,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html.dark .dropdown-se ul{
+  background: #374151!important;
+  border-color: #4b5563!important;
+}
