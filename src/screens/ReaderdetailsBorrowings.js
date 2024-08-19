@@ -314,15 +314,15 @@ const ReaderdetailsBorrowings = () => {
       <Menu />
       <main className="flex-1 2xl:pl-[16rem]">
         <TopHeader />
-        <div className="p-6 min-h-[84.2vh]">
+        <div className="p-4 md:p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
             </button>
             <h1 className="text-xl font-bold"> Edytuj czytelnika</h1>
           </div>
-          <div className="flex">
-            <div className="w-2/5">
+          <div className="md:flex">
+            <div className="w-full w-2/5">
               <div className="bg-white shadow-md rounded p-6 h-fit mb-4 dark:bg-primary dark:border-gray-700">
                 <div className="flex flex-col items-center mb-4">
                   <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] mx-auto border-4 border-[#ef4444] mb-5'>
@@ -333,11 +333,11 @@ const ReaderdetailsBorrowings = () => {
                 </div>
               </div>
             </div>
-            <div className="w-3/5 bg-white shadow-md rounded p-8 ml-4 dark:bg-primary dark:border-gray-700">
+            <div className="w-full w-3/5 bg-white shadow-md rounded p-8 md:ml-4 dark:bg-primary dark:border-gray-700">
               <div className="mx-auto">
                 {borrowings.length === 0 ? (
                   <div>
-                    <div className="flex justify-between items-center mb-4 gap-4">
+                    <div className="md:flex justify-between items-center mb-4 gap-4">
                       <h2 className="text-2xl font-bold">Wypożyczenia</h2>
                       <button
                         onClick={handleAddBorrowingClick}
@@ -356,7 +356,7 @@ const ReaderdetailsBorrowings = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex justify-between items-center mb-4 gap-4">
+                    <div className="md:flex justify-between items-center mb-4 gap-4">
                       <h2 className="text-2xl font-bold">Wypożyczenia</h2>
                       <button
                         onClick={handleAddBorrowingClick}
@@ -365,30 +365,30 @@ const ReaderdetailsBorrowings = () => {
                         Dodaj wypożyczenie <LuBookPlus />
                       </button>
                     </div>
-                    <div className="flex items-center mb-4 gap-4">
+                    <div className="md:flex items-center mb-4 gap-4">
                       <p>Pokaż tylko</p>
-                      <div className='flex gap-5'>
+                      <div className='md:flex gap-5'>
                         <button
                           onClick={() => handleFilterStatus(null, 'all')}
-                          className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
+                          className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
                           Wszystkie <FaBookReader />
                         </button>
                         <button
                           onClick={() => handleFilterStatus('returned', 'returned')}
-                          className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
+                          className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
                           Zwrócone <IoIosReturnLeft />
                         </button>
                         <button
                           onClick={() => handleFilterStatus('pending', 'pending')}
-                          className={`items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
+                          className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
                           Wypożyczone <FaBookReader />
                         </button>
                       </div>
                     </div>
-                    <div className="flex items-center mb-4 gap-4">
+                    <div className="md:flex items-center mb-4 gap-4">
                       <label htmlFor="sortField" className="block">Sortuj po:</label>
                       <select
                         id="sortField"

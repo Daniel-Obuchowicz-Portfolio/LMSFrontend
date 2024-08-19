@@ -29,11 +29,10 @@ const Delays = () => {
       if (response.ok) {
         const data = await response.json();
         if (data && typeof data === 'object') {
-          // Convert the object to an array using Object.values()
           setOverdueBooks(Object.values(data));
         } else {
           console.error('Unexpected response format:', data);
-          setOverdueBooks([]); // Set to an empty array if the response is not an array
+          setOverdueBooks([]);
         }
       } else {
         console.error('Failed to fetch overdue books data');
@@ -44,7 +43,6 @@ const Delays = () => {
     fetchOverdueBooks();
   }, []);
 
-  // Calculate the current items
   const indexOfLastItem = currentPage * borrowingsPerPage;
   const indexOfFirstItem = indexOfLastItem - borrowingsPerPage;
   const currentBorrowings = overdueBooks.slice(indexOfFirstItem, indexOfLastItem);
@@ -52,65 +50,70 @@ const Delays = () => {
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
-    <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
+    <div className="min-h-screen flex flex-col lg:flex-row font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
       <Menu />
       <main className="flex-1 2xl:pl-[16rem]">
         <TopHeader />
-        <div className="p-6 min-h-[84.2vh]">
-          <div className="flex justify-left items-center mb-4 gap-4 items-center">
-            <h1 className="text-xl font-bold">Zaległości</h1>
+        <div className="p-4 md:p-6 min-h-[84.2vh]">
+          <div className="flex justify-between items-center mb-6 gap-4">
+            <h1 className="text-lg md:text-xl font-bold">Zaległości</h1>
+            <button
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base"
+              onClick={() => window.history.back()}
+              aria-label="Powrót"
+            >
+              <IoIosArrowBack /> Powrót
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 ">
-            <div className="bg-white dark:bg-primary rounded-lg shadow-md p-5">
+          <div className="grid grid-cols-1 gap-6">
+            <div className="bg-white dark:bg-primary rounded-lg shadow-md p-4 md:p-5">
               {isLoading ? (
                 <Skeleton width="100%" height="200px" />
               ) : (
-                <div className="">
+                <div className="overflow-x-auto">
                   <table className="w-full min-w-max table-auto text-left font-montserrat">
-                    <thead className='text-xs font-semibold uppercase bg-gray-50 dark:bg-gray-700 rounded'>
+                    <thead className="text-xs font-semibold uppercase bg-gray-50 dark:bg-gray-700 rounded">
                       <tr>
-                        <th className="border-blue-gray-100 bg-blue-gray-50/50 dark:bg-gray-800 p-4">
-                          <p className="block antialiased font-sans text-sm text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Tytuł</p>
+                        <th className="p-3 md:p-5">
+                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Tytuł</p>
                         </th>
-                        <th className="border-blue-gray-100 bg-blue-gray-50/50 dark:bg-gray-800 p-4">
-                          <p className="block antialiased font-sans text-sm text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Czytelnik</p>
+                        <th className="p-3 md:p-5">
+                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Czytelnik</p>
                         </th>
-                        <th className="border-blue-gray-100 bg-blue-gray-50/50 dark:bg-gray-800 p-4">
-                          <p className="block antialiased font-sans text-sm text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Zwłoka</p>
+                        <th className="p-3 md:p-5">
+                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Zwłoka</p>
                         </th>
-                        <th className="border-blue-gray-100 bg-blue-gray-50/50 dark:bg-gray-800 p-4">
-                          <p className="block antialiased font-sans text-sm text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70"></p>
+                        <th className="p-3 md:p-5">
+                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70"></p>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentBorrowings.map(borrowing => (
                         <tr key={borrowing.id}>
-                          <td className="p-2">
-                            <div className="flex items-center gap-3">
-                              <img src={borrowing.book.coverImage || '/img/blank-book-cover-over-png.png'} alt={`${borrowing.book.title} cover`} className="inline-block relative object-center w-8 border border-blue-gray-50 dark:border-gray-700 bg-blue-gray-50/50 dark:bg-gray-700 object-contain" />
-                              <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 dark:text-gray-300 font-bold">{borrowing.book.title}</p>
+                          <td className="p-3 md:p-5">
+                            <div className="flex items-center gap-4 md:gap-6">
+                              <img src={borrowing.book.coverImage || '/img/blank-book-cover-over-png.png'} alt={`${borrowing.book.title} cover`} className="w-8 md:w-10 object-contain" />
+                              <p className="text-sm md:text-base font-bold text-blue-gray-900 dark:text-gray-300">{borrowing.book.title}</p>
                             </div>
                           </td>
-                          <td className="p-2">
-                            <div className="flex items-center gap-3">
-                              <img src={borrowing.user.profile_picture || '/img/profile-icon-design.jpg'} alt={`${borrowing.user.first_name}'s profile`} className="inline-block w-12 h-12 rounded-full border border-blue-gray-50 dark:border-gray-700 bg-blue-gray-50/50 dark:bg-gray-700 object-cover p-0" />
-                              <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 dark:text-gray-300 font-bold">{borrowing.user.first_name} {borrowing.user.last_name}</p>
+                          <td className="p-3 md:p-5">
+                            <div className="flex items-center gap-4 md:gap-6">
+                              <img src={borrowing.user.profile_picture || '/img/profile-icon-design.jpg'} alt={`${borrowing.user.first_name}'s profile`} className="w-10 md:w-12 h-10 md:h-12 rounded-full object-cover" />
+                              <p className="text-sm md:text-base font-bold text-blue-gray-900 dark:text-gray-300">{borrowing.user.first_name} {borrowing.user.last_name}</p>
                             </div>
                           </td>
-                          <td className="p-2">
+                          <td className="p-3 md:p-5">
                             <div className="w-max">
                               <div className="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-red-500/20 dark:bg-red-900 text-red-900 dark:text-red-500 py-1 px-2 text-xs rounded-md">
                                 <span>{Math.floor((new Date() - new Date(borrowing.borrowing_date)) / (1000 * 60 * 60 * 24))} dni</span>
                               </div>
                             </div>
                           </td>
-                          <td className="p-2">
-                            <Link to={`/readerdetails/${borrowing.user.id}`} className="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 dark:text-gray-300 hover:bg-gray-900/10 dark:hover:bg-gray-300/10 active:bg-gray-900/20" type="button">
-                              <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                                <MdArrowForwardIos className="h-4 w-4" />
-                              </span>
+                          <td className="p-3 md:p-5">
+                            <Link to={`/readerdetails/${borrowing.user.id}`} className="relative w-8 h-8 md:w-10 md:h-10 rounded-lg text-gray-900 dark:text-gray-300 hover:bg-gray-900/10 dark:hover:bg-gray-300/10 flex items-center justify-center">
+                              <MdArrowForwardIos className="h-4 w-4" />
                             </Link>
                           </td>
                         </tr>
@@ -161,7 +164,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
   };
 
   return (
-    <nav className="mt-4 flex justify-left">
+    <nav className="mt-4 flex justify-between">
       <ul className="flex gap-2">
         <li className={`page-item ${currentPage === 1 ? 'hidden' : ''}`}>
           <button
