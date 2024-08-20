@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaBars, FaTimes } from 'react-icons/fa'; // Import FaBars and FaTimes for the hamburger and close icons
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserData } from './userSlice';
 import { useDarkMode } from '../components/DarkModeContext'; // Assuming you have a DarkModeContext
 
-const TopHeader = () => {
+const TopHeader = ({ toggleSidebar }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user.user);
@@ -14,6 +14,7 @@ const TopHeader = () => {
     const { isDarkMode, toggleDarkMode } = useDarkMode(); // Use dark mode context
     const [searchQuery, setSearchQuery] = useState('');
     const [isMoreOptionsOpen, setIsMoreOptionsOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Track whether the sidebar is open
 
     const wrapperRef = useRef(null);
 
@@ -62,9 +63,15 @@ const TopHeader = () => {
             (window.innerWidth < 768 ? "left-0" : "right-0");
     };
 
+    const handleToggleSidebar = () => {
+        toggleSidebar(); // Toggle the sidebar
+        setIsSidebarOpen(!isSidebarOpen); // Toggle the state for the icon
+    };
+
     return (
         <div className="flex justify-between items-center p-4 px-6 bg-white dark:bg-primary" ref={wrapperRef}>
-            <div className="flex items-center space-x-4">
+            <img className="flex md:hidden h-12 w-auto" src="/img/workflow-mark-indigo-600.svg" alt="Workflow" />
+            <div className="hidden md:flex items-center space-x-4">
                 <div className="relative flex items-center">
                     <form onSubmit={handleSearch} className="flex">
                         <input
@@ -83,7 +90,7 @@ const TopHeader = () => {
                     </form>
                 </div>
             </div>
-            <div className="flex items-center space-x-6">
+            <div className="hidden md:flex items-center space-x-6">
                 <div className="hidden lg:flex items-center space-x-4">
                     <img src={user.profile_picture || '/img/profile-icon-design.jpg'} alt="Profile" className="w-10 h-10 object-cover rounded-full" />
                     <div>
@@ -109,6 +116,12 @@ const TopHeader = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            {/* Hamburger menu button, visible on small screens */}
+            <div className="lg:hidden flex items-center">
+                <button onClick={handleToggleSidebar} className="text-gray-600 dark:text-white">
+                    {isSidebarOpen ? <FaTimes className="text-4xl" /> : <FaBars className="text-4xl" />}
+                </button>
             </div>
         </div>
     );

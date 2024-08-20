@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
@@ -11,6 +11,25 @@ import { FaBookReader, FaInfoCircle } from "react-icons/fa";
 import Footer from '../components/Footer';
 
 const ReaderdetailsBorrowings = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+
+  const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+  };
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [borrowings, setBorrowings] = useState([]);
@@ -311,10 +330,10 @@ const ReaderdetailsBorrowings = () => {
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-gray-200">
-      <Menu />
-      <main className="flex-1 2xl:pl-[16rem]">
-        <TopHeader />
-        <div className="p-4 md:p-6 min-h-[84.2vh]">
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
+      <main className="flex-1 xl:pl-[16rem]">
+        <TopHeader toggleSidebar={toggleSidebar} />
+        <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
               <IoIosArrowBack /> Powrót
@@ -338,7 +357,7 @@ const ReaderdetailsBorrowings = () => {
                 {borrowings.length === 0 ? (
                   <div>
                     <div className="md:flex justify-between items-center mb-4 gap-4">
-                      <h2 className="text-2xl font-bold">Wypożyczenia</h2>
+                      <h2 className="text-2xl font-bold mb-4 md:mb-0">Wypożyczenia</h2>
                       <button
                         onClick={handleAddBorrowingClick}
                         className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
@@ -357,7 +376,7 @@ const ReaderdetailsBorrowings = () => {
                 ) : (
                   <>
                     <div className="md:flex justify-between items-center mb-4 gap-4">
-                      <h2 className="text-2xl font-bold">Wypożyczenia</h2>
+                      <h2 className="text-2xl font-bold mb-4 md:mb-0">Wypożyczenia</h2>
                       <button
                         onClick={handleAddBorrowingClick}
                         className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
@@ -410,7 +429,7 @@ const ReaderdetailsBorrowings = () => {
                     {currentBorrowings.map((borrowing) => (
                       <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded dark:bg-gray-800 dark:border-gray-700">
                         <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
-                          <img className="w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
+                          <img className="w-[10vh] md:w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
                         </div>
                         <div className="md:w-9/12 md:pl-4">
                           <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
@@ -578,7 +597,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
           </button>
         </li>
         {pageNumbers.map(number => (
-          <li key={number} className="page-item">
+          <li key={number} className="page-item hidden md:block">
             <button
               onClick={() => paginate(number)}
               className={`px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${currentPage === number ? 'bg-red-700 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}

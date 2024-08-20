@@ -1,16 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import { FaSearch } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from "react-icons/io";
-import { MdOutlineMail, MdLocalPhone  } from "react-icons/md";
+import { MdOutlineMail, MdLocalPhone } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoPerson } from "react-icons/io5";
 import { BsCalendarDate } from "react-icons/bs";
 import Footer from '../components/Footer';
 
 const Books = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+
+  const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+  };
   const [books, setBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(8);
@@ -88,13 +107,18 @@ const Books = () => {
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
-      <Menu />
-      <main className="flex-1 2xl:pl-[16rem]">
-        <TopHeader/>
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
+      <main className="flex-1 xl:pl-[16rem]">
+        <TopHeader toggleSidebar={toggleSidebar} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex justify-left items-center mb-4 gap-4">
-              <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}><IoIosArrowBack /> Powrót</button> 
+          <div className="md:flex justify-between items-center mb-4">
+          <div className="md:flex items-center mb-6 gap-4">
+            <button
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              onClick={() => navigate(-1)}
+            >
+              <IoIosArrowBack /> Powrót
+            </button>
               <h1 className="text-xl font-bold dark:text-white">Księgoziór</h1>
             </div>
             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
@@ -103,7 +127,7 @@ const Books = () => {
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="px-4 py-2 rounded-lg border border-gray-300 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                className="px-4 py-2 rounded-lg border border-gray-300 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 w-full"
               />
               <button type="submit" className="absolute right-3 text-gray-400">
                 <FaSearch />
@@ -125,10 +149,10 @@ const Books = () => {
                     <p className="mb-1 flex gap-3 items-center dark:text-gray-300"><IoPerson /> {book.author}</p>
                     <p className="flex gap-3 items-center dark:text-gray-300"><BsCalendarDate /> {new Date(book.publicationDate).toLocaleDateString('pl-PL', {
                       year: 'numeric',
-                      month: 'long', 
-                      day: 'numeric' 
-                      })}</p>
-                    <Link to={`/bookdetails/${book.id}`} className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Szczegóły <RiExternalLinkFill/></Link>
+                      month: 'long',
+                      day: 'numeric'
+                    })}</p>
+                    <Link to={`/bookdetails/${book.id}`} className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Szczegóły <RiExternalLinkFill /></Link>
                   </div>
                 </div>
               ))}

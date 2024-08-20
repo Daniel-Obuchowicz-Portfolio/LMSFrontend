@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
@@ -7,11 +7,30 @@ import { IoIosArrowBack } from "react-icons/io";
 import Footer from '../components/Footer';
 
 const ReaderAdd = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
   const { id } = useParams();
   const [user, setUser] = useState({ is_active: true });
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,59 +50,62 @@ const ReaderAdd = () => {
     const token = localStorage.getItem('token');
 
     if (file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const updatedUser = { ...user, profile_picture_p: reader.result };
-            await submitUserData(updatedUser, token);
-        };
-        reader.onerror = error => console.log('Error: ', error);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        const updatedUser = { ...user, profile_picture_p: reader.result };
+        await submitUserData(updatedUser, token);
+      };
+      reader.onerror = error => console.log('Error: ', error);
     } else {
-        // Submit without a profile picture
-        await submitUserData(user, token);
+      // Submit without a profile picture
+      await submitUserData(user, token);
     }
   };
 
   const submitUserData = async (userData, token) => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userData)
     });
 
     if (response.ok) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'User registered successfully',
-        });
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'User registered successfully',
+      });
     } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to register user',
-        });
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to register user',
+      });
     }
   };
-  
+
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
-      <Menu />
-      <main className="flex-1 2xl:pl-[16rem]">
-        <TopHeader />
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
+      <main className="flex-1 xl:pl-[16rem]">
+        <TopHeader toggleSidebar={toggleSidebar} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="flex justify-left items-center mb-4 gap-4 items-center">
-            <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
+          <div className="md:flex items-center mb-6 gap-4">
+            <button
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              onClick={() => navigate(-1)}
+            >
               <IoIosArrowBack /> Powrót
             </button>
             <h1 className="text-xl font-bold"> Dodaj nowego czytelnika</h1>
           </div>
-          <div className="flex">
-            <div className="w-2/5 bg-white dark:bg-primary shadow-md rounded p-6 h-fit">
+          <div className="md:flex">
+            <div className="md:w-2/5 bg-white dark:bg-primary shadow-md rounded p-6 h-fit">
               <div className="flex flex-col items-center mb-4">
                 <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] dark:bg-gray-700 mx-auto border-4 border-[#ef4444] mb-5'>
                   <img className="w-[132px] h-[132px] rounded-full mb-4 object-cover" src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user?.first_name} ${user?.last_name}`} />
@@ -92,11 +114,11 @@ const ReaderAdd = () => {
                 <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
               </div>
             </div>
-            <div className="w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 ml-4">
+            <div className="md:w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 md:ml-4 mt-4 md:mt-0">
               <div className="mx-auto">
                 <h2 className="text-2xl font-bold mb-4">Edit Information</h2>
                 <form onSubmit={handleSubmit}>
-                <input type="hidden" name="is_active" value={user.is_active} onChange={handleInputChange} />
+                  <input type="hidden" name="is_active" value={user.is_active} onChange={handleInputChange} />
                   <div className="mb-4">
                     <label className="block text-gray-700 dark:text-gray-300">First Name</label>
                     <input

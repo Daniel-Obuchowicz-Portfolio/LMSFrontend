@@ -1,11 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import Footer from '../components/Footer';
 import ReactFlagsSelect from 'react-flags-select';
 import { useDarkMode } from '../components/DarkModeContext'; // Adjust the path accordingly
+import { useNavigate } from'react-router-dom';
+import { IoIosArrowBack } from "react-icons/io";
 
 const Settings = () => {
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+
+  const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+  };
   const { isDarkMode, setIsDarkMode } = useDarkMode();
   const [selectedLanguage, setSelectedLanguage] = useState('US'); // Default language is English (US)
 
@@ -20,11 +42,17 @@ const Settings = () => {
 
   return (
     <div className={`min-h-screen flex font-montserrat ${isDarkMode ? 'dark' : ''} bg-gray-100 dark:bg-gray-800 text-darkText dark:text-lightText transition-colors duration-300`}>
-      <Menu />
-      <main className="flex-1 2xl:pl-[16rem]">
-        <TopHeader />
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
+      <main className="flex-1 xl:pl-[16rem]">
+        <TopHeader toggleSidebar={toggleSidebar} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="flex justify-left items-center mb-4 gap-4 items-center">
+          <div className="md:flex items-center mb-6 gap-4">
+          <button
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              onClick={() => navigate(-1)}
+            >
+              <IoIosArrowBack /> Powrót
+            </button>
             <h1 className="text-xl font-bold">Settings</h1>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Menu from '../components/Header';
@@ -9,12 +9,32 @@ import { MdOutlineMail, MdLocalPhone, MdSearch, MdOutlineErrorOutline, MdClose, 
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoPerson } from "react-icons/io5";
 import { BsCalendarDate } from "react-icons/bs";
+import { IoIosArrowBack } from "react-icons/io";
 
 const Skeleton = ({ width, height }) => (
   <div style={{ width, height, backgroundColor: '#e0e0e0' }} className="rounded animate-pulse m-3 mx-0"></div>
 );
 
 const Search = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
   const [query, setQuery] = useState('');
   const [books, setBooks] = useState([]);
   const [readers, setReaders] = useState([]);
@@ -134,11 +154,20 @@ const Search = () => {
 
   return (
     <div className="min-h-screen flex font-montserrat bg-gray-100 dark:bg-gray-800 dark:text-white">
-      <Menu />
-      <main className="flex-1 2xl:pl-[16rem]">
-        <TopHeader />
-        <div className="flex flex-col lg:flex-row p-6 gap-6 min-h-[84vh]">
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
+      <main className="flex-1 xl:pl-[16rem]">
+        <TopHeader toggleSidebar={toggleSidebar} />
+        <div className="flex flex-col lg:flex-row p-6 min-h-[84vh]">
           <div className="w-full lg:w-3/4">
+            <div className="md:flex items-center mb-6 gap-4">
+              <button
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+                onClick={() => navigate(-1)}
+              >
+                <IoIosArrowBack /> Powrót
+              </button>
+              <h1 className="text-xl font-bold"> Wyszukiwanie</h1>
+            </div>
             <div className="mb-6">
               <form onSubmit={handleSearch} className="relative">
                 <input

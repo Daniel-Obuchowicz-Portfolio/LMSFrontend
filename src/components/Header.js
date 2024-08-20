@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaHome, FaBookReader, FaRegCalendarTimes } from 'react-icons/fa';
 import { TbBooks } from "react-icons/tb";
 import { Link, useLocation } from 'react-router-dom';
 import { HiUserAdd } from "react-icons/hi";
 import { BiSolidBookAdd } from "react-icons/bi";
-import { CiSearch  } from "react-icons/ci";
+import { CiSearch } from "react-icons/ci";
 import { IoSettingsSharp } from "react-icons/io5";
 
-
-const Menu = () => {
-    const [sidebar, setSidebar] = useState(false);
+const Menu = ({ sidebar, toggleSidebar, sidebarRef }) => { // Accept sidebarRef as a prop
     const location = useLocation();
 
     const menuItems = [
@@ -20,14 +18,15 @@ const Menu = () => {
         { to: '/book/add', label: 'Nowa książka', icon: <BiSolidBookAdd /> },
         { to: '/search', label: 'Wyszukiwanie', icon: <CiSearch /> },
         { to: '/delays', label: 'Zaległości', icon: <FaRegCalendarTimes /> },
-        { to: '/settings', label: 'Ustawienia', icon: <IoSettingsSharp  /> },
+        { to: '/settings', label: 'Ustawienia', icon: <IoSettingsSharp /> },
     ];
 
     return (
         <aside
+            ref={sidebarRef} // Attach ref to the sidebar element
             id="sidebar-menu"
             aria-expanded={sidebar}
-            className={`fixed transition-all duration-500 ease-in-out h-screen bg-white bg-cover bg-[url('https://wallpapers.com/images/hd/minimalist-phone-1440-x-2560-background-l50nd91jwe8kergc.jpg')] shadow-sm w-64 ${sidebar ? 'w-64 md:-ms-64' : 'w-64 -ms-64 md:ms-0'} `}
+            className={`fixed transition-transform duration-300 ease-in-out h-screen bg-white bg-cover bg-[url('https://wallpapers.com/images/hd/minimalist-phone-1440-x-2560-background-l50nd91jwe8kergc.jpg')] shadow-sm w-64 z-50 transform ${sidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
         >
             <div className="h-full overflow-y-auto scrollbars">
                 {/* Logo */}

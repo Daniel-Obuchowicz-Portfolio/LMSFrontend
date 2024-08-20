@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef  } from 'react';
 import { FaBars, FaSearch, FaHome } from 'react-icons/fa';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
@@ -78,9 +78,29 @@ const StatsChart = ({ borrowData, readersData, title }) => {
 };
 
 const Dashboard = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+  };
   const [borrowData, setBorrowData] = useState([]);
   const [readersData, setReadersData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -237,9 +257,9 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800">
-      <Menu />
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
       <main className="flex-1 xl:pl-[16rem]">
-        <TopHeader />
+        <TopHeader toggleSidebar={toggleSidebar} />
         <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <h1 className="text-xl font-bold dark:text-white">Dashboard</h1>
@@ -291,9 +311,9 @@ const Dashboard = () => {
           {/* Charts and Additional Information */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-2xl dark:text-white">Nowi czytelnicy</h2>
-                <Link to="/readers" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">
+              <div className='md:flex justify-between items-center'>
+                <h2 className="font-semibold text-2xl dark:text-white mb-4 md:mb-0">Nowi czytelnicy</h2>
+                <Link to="/readers" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none w-fit">
                   Zobacz wszystkich <MdArrowForwardIos />
                 </Link>
               </div>
@@ -363,9 +383,9 @@ const Dashboard = () => {
               )}
             </div>
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-2xl dark:text-white">Nowości w księgozbiorach</h2>
-                <Link to="/books" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">
+              <div className='md:flex justify-between items-center'>
+                <h2 className="font-semibold text-2xl dark:text-white mb-4 md:mb-0">Nowości w księgozbiorach</h2>
+                <Link to="/books" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none w-fit">
                   Zobacz wszystkie <MdArrowForwardIos />
                 </Link>
               </div>
@@ -427,7 +447,7 @@ const Dashboard = () => {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className='flex justify-between items-center'>
+              <div className='md:flex justify-between items-center'>
                 <h2 className="font-semibold text-2xl dark:text-white">Nowi czytelnicy i wypożyczenia</h2>
               </div>
               {isLoading ? (
@@ -442,9 +462,9 @@ const Dashboard = () => {
               )}
             </div>
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-2xl dark:text-white">Zaległości</h2>
-                <Link to="/delays" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">
+              <div className='md:flex justify-between items-center'>
+                <h2 className="font-semibold text-2xl dark:text-white mb-4 md:mb-0">Zaległości</h2>
+                <Link to="/delays" className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none w-fit">
                   Zobacz wszystkie <MdArrowForwardIos />
                 </Link>
               </div>

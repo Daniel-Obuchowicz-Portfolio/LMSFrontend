@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import { FaSearch } from 'react-icons/fa';
@@ -9,6 +9,25 @@ import { RiExternalLinkFill } from "react-icons/ri";
 import Footer from '../components/Footer';
 
 const Readers = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+
+  const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+  };
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(8);
@@ -92,14 +111,14 @@ const Readers = () => {
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800">
-      <Menu />
-      <main className="flex-1 2xl:pl-[16rem]">
-        <TopHeader />
-        <div className="p-4 sm:p-6 min-h-[84.2vh]">
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
+      <main className="flex-1 xl:pl-[16rem]">
+        <TopHeader toggleSidebar={toggleSidebar} />
+        <div className="p-6 min-h-[84.2vh]">
           <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
-            <div className="flex items-center gap-4">
+            <div className="md:flex items-center gap-4">
               <button
-                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center"
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center mb-4 md:mb-0"
                 onClick={() => navigate(-1)}
                 aria-label="Powrót"
               >

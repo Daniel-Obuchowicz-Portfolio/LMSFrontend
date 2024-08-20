@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
@@ -7,6 +7,26 @@ import { IoIosArrowBack } from "react-icons/io";
 import Footer from '../components/Footer';
 
 const BookAdd = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const sidebarRef = useRef(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false); // Close sidebar if click outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,18 +91,21 @@ const BookAdd = () => {
 
   return (
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
-      <Menu />
-      <main className="flex-1 2xl:pl-[16rem]">
-        <TopHeader />
+      <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
+      <main className="flex-1 xl:pl-[16rem]">
+        <TopHeader toggleSidebar={toggleSidebar} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="flex justify-left items-center mb-4 gap-4 items-center">
-            <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
+          <div className="md:flex items-center mb-6 gap-4">
+            <button
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              onClick={() => navigate(-1)}
+            >
               <IoIosArrowBack /> Powrót
             </button>
             <h1 className="text-xl font-bold">Dodaj Książkę</h1>
           </div>
-          <div className="flex">
-            <div className="w-2/5 bg-white dark:bg-primary shadow-md rounded p-6 h-fit">
+          <div className="flex flex-col md:flex-row">
+            <div className="w-full md:w-2/5 bg-white dark:bg-primary shadow-md rounded p-6 h-fit mb-4 md:mb-0">
               <div className="flex flex-col items-center mb-4">
                 <div className='px-4'>
                   <div className='w-[240px] bg-[#ffffff] dark:bg-gray-700 rounded-[4px]'>
@@ -93,7 +116,7 @@ const BookAdd = () => {
                 <p className="text-gray-600 dark:text-gray-300">Author: {book?.author}</p>
               </div>
             </div>
-            <div className="w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 ml-4">
+            <div className="w-full md:w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 md:ml-4">
               <div className="mx-auto">
                 <h2 className="text-2xl font-bold mb-4 dark:text-white">Informacje o książce</h2>
                 <form onSubmit={handleSubmit}>
