@@ -1,0 +1,26 @@
+{
+    "Error": "Error",
+    "Failed to fetch book data": "No se pudieron obtener los datos del libro",
+    "Success": "Éxito",
+    "Book updated successfully": "Libro actualizado con éxito",
+    "Failed to update book": "No se pudo actualizar el libro",
+    "Back": "Volver",
+    "Edit Book": "Editar Libro",
+    "Quick Info": "Información Rápida",
+    "Author": "Autor",
+    "Recent Borrowings": "Préstamos Recientes",
+    "No data available": "No hay datos disponibles",
+    "Borrow Date": "Fecha de Préstamo",
+    "Return Date": "Fecha de Devolución",
+    "Book Information": "Información del Libro",
+    "Title": "Título",
+    "ISBN": "ISBN",
+    "Publication Date": "Fecha de Publicación",
+    "Publisher": "Editorial",
+    "Genre": "Género",
+    "Summary": "Resumen",
+    "Page Count": "Número de Páginas",
+    "Cover": "Portada",
+    "Save changes": "Guardar cambios"
+  }
+  

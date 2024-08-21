@@ -1,20 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaSearch, FaBars, FaTimes } from 'react-icons/fa'; // Import FaBars and FaTimes for the hamburger and close icons
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserData } from './userSlice';
-import { useDarkMode } from '../components/DarkModeContext'; // Assuming you have a DarkModeContext
 
-const TopHeader = ({ toggleSidebar }) => {
+const TopHeader = ({ toggleSidebar, isSidebarOpen }) => { // Accept toggleSidebar and isSidebarOpen as props
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user.user);
     const userStatus = useSelector((state) => state.user.status);
 
-    const { isDarkMode, toggleDarkMode } = useDarkMode(); // Use dark mode context
     const [searchQuery, setSearchQuery] = useState('');
     const [isMoreOptionsOpen, setIsMoreOptionsOpen] = useState(false);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Track whether the sidebar is open
 
     const wrapperRef = useRef(null);
 
@@ -62,11 +59,7 @@ const TopHeader = ({ toggleSidebar }) => {
         return "absolute bg-white dark:bg-gray-700 dark:text-white shadow-md mt-2 rounded-lg py-1 mr-[22px] mt-[30px] z-[99] " +
             (window.innerWidth < 768 ? "left-0" : "right-0");
     };
-
-    const handleToggleSidebar = () => {
-        toggleSidebar(); // Toggle the sidebar
-        setIsSidebarOpen(!isSidebarOpen); // Toggle the state for the icon
-    };
+    
 
     return (
         <div className="flex justify-between items-center p-4 px-6 bg-white dark:bg-primary" ref={wrapperRef}>
@@ -119,7 +112,7 @@ const TopHeader = ({ toggleSidebar }) => {
             </div>
             {/* Hamburger menu button, visible on small screens */}
             <div className="lg:hidden flex items-center">
-                <button onClick={handleToggleSidebar} className="text-gray-600 dark:text-white">
+                <button onClick={toggleSidebar} className="text-gray-600 dark:text-white">
                     {isSidebarOpen ? <FaTimes className="text-4xl" /> : <FaBars className="text-4xl" />}
                 </button>
             </div>

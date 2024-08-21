@@ -4,20 +4,25 @@ import TopHeader from '../components/TopHeader';
 import { FaSearch } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from "react-icons/io";
-import { MdOutlineMail, MdLocalPhone } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoPerson } from "react-icons/io5";
 import { BsCalendarDate } from "react-icons/bs";
 import Footer from '../components/Footer';
+import { useTranslation } from 'react-i18next';
 
 const Books = () => {
+  const { t } = useTranslation('books');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null); 
+  const sidebarRef = useRef(null);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setSidebarOpen(false); // Close sidebar if click outside
+        setSidebarOpen(false);
       }
     };
 
@@ -27,14 +32,10 @@ const Books = () => {
     };
   }, [sidebarRef]);
 
-  const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
-  };
   const [books, setBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
 
   const fetchBooks = async () => {
     const token = localStorage.getItem('token');
@@ -70,7 +71,6 @@ const Books = () => {
     if (response.ok) {
       const data = await response.json();
       setBooks(data);
-      setIsSearching(true);
     } else {
       console.error('Failed to fetch search results');
     }
@@ -79,7 +79,6 @@ const Books = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     if (e.target.value === '') {
-      setIsSearching(false);
       fetchBooks();
     }
   };
@@ -109,22 +108,22 @@ const Books = () => {
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
       <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
       <main className="flex-1 xl:pl-[16rem]">
-        <TopHeader toggleSidebar={toggleSidebar} />
+        <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
           <div className="md:flex justify-between items-center mb-4">
-          <div className="md:flex items-center mb-6 gap-4">
-            <button
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
-              onClick={() => navigate(-1)}
-            >
-              <IoIosArrowBack /> Powrót
-            </button>
-              <h1 className="text-xl font-bold dark:text-white">Księgoziór</h1>
+            <div className="md:flex items-center mb-6 gap-4">
+              <button
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+                onClick={() => navigate(-1)}
+              >
+                <IoIosArrowBack /> {t('Back')}
+              </button>
+              <h1 className="text-xl font-bold dark:text-white">{t('Books Collection')}</h1>
             </div>
             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder={t('Search') + "..."}
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="px-4 py-2 rounded-lg border border-gray-300 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 w-full"
@@ -152,7 +151,7 @@ const Books = () => {
                       month: 'long',
                       day: 'numeric'
                     })}</p>
-                    <Link to={`/bookdetails/${book.id}`} className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">Szczegóły <RiExternalLinkFill /></Link>
+                    <Link to={`/bookdetails/${book.id}`} className="w-fit mt-3 px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">{t('Details')} <RiExternalLinkFill /></Link>
                   </div>
                 </div>
               ))}
@@ -173,6 +172,7 @@ const Books = () => {
 };
 
 const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage, setCurrentPage }) => {
+  const { t } = useTranslation('books');
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
@@ -185,7 +185,7 @@ const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage, setCurren
         {currentPage > 1 && (
           <li className="page-item">
             <button onClick={() => paginate(currentPage - 1)} className="px-3 py-1 border rounded text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">
-              Previous
+              {t('Previous')}
             </button>
           </li>
         )}
@@ -202,7 +202,7 @@ const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage, setCurren
         {currentPage < pageNumbers.length && (
           <li className="page-item">
             <button onClick={() => paginate(currentPage + 1)} className="px-3 py-1 border rounded text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none">
-              Next
+              {t('Next')}
             </button>
           </li>
         )}

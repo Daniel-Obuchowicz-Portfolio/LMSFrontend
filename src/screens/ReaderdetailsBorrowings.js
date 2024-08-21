@@ -9,11 +9,18 @@ import { LuBookPlus } from "react-icons/lu";
 import Modal from '../components/Modal';
 import { FaBookReader, FaInfoCircle } from "react-icons/fa";
 import Footer from '../components/Footer';
+import { useTranslation } from 'react-i18next';
 
 const ReaderdetailsBorrowings = () => {
+  const { t } = useTranslation(['readerdetails']); // Import the useTranslation hook
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null); 
+  const sidebarRef = useRef(null); // Reference to the sidebar element
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  // Close sidebar when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -27,13 +34,9 @@ const ReaderdetailsBorrowings = () => {
     };
   }, [sidebarRef]);
 
-  const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
-  };
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [borrowings, setBorrowings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [borrowingsPerPage] = useState(8);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -76,11 +79,11 @@ const ReaderdetailsBorrowings = () => {
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch user data',
+          title: t('Error'),
+          text: t('Failed to fetch user data'),
         });
       }
-      setIsLoading(false);
+      // setIsLoading(false);
     };
 
     const fetchBorrowings = async () => {
@@ -102,15 +105,15 @@ const ReaderdetailsBorrowings = () => {
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch borrowings data',
+          title: t('Error'),
+          text: t('Failed to fetch borrowings data'),
         });
       }
     };
 
     fetchUser();
     fetchBorrowings();
-  }, [id, filterStatus, sortField, sortOrder]);
+  }, [id, filterStatus, sortField, sortOrder, t]);
 
   const indexOfLastBorrowing = currentPage * borrowingsPerPage;
   const indexOfFirstBorrowing = indexOfLastBorrowing - borrowingsPerPage;
@@ -163,21 +166,21 @@ const ReaderdetailsBorrowings = () => {
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch borrowings data',
+          title: t('Error'),
+          text: t('Failed to fetch borrowings data'),
         });
       }
       setIsAddModalOpen(false);
       Swal.fire({
         icon: 'success',
-        title: 'Success',
-        text: 'Borrowing record added successfully',
+        title: t('Success'),
+        text: t('Borrowing record added successfully'),
       });
     } else {
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'Failed to add borrowing record',
+        title: t('Error'),
+        text: t('Failed to add borrowing record'),
       });
     }
   };
@@ -207,21 +210,21 @@ const ReaderdetailsBorrowings = () => {
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch borrowings data',
+          title: t('Error'),
+          text: t('Failed to fetch borrowings data'),
         });
       }
       setIsReturnModalOpen(false);
       Swal.fire({
         icon: 'success',
-        title: 'Success',
-        text: 'Return date updated successfully',
+        title: t('Success'),
+        text: t('Return date updated successfully'),
       });
     } else {
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'Failed to update return date',
+        title: t('Error'),
+        text: t('Failed to update return date'),
       });
     }
   };
@@ -251,21 +254,21 @@ const ReaderdetailsBorrowings = () => {
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch borrowings data',
+          title: t('Error'),
+          text: t('Failed to fetch borrowings data'),
         });
       }
       setIsProlongationModalOpen(false);
       Swal.fire({
         icon: 'success',
-        title: 'Success',
-        text: 'Prolongation updated successfully',
+        title: t('Success'),
+        text: t('Prolongation updated successfully'),
       });
     } else {
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'Failed to update prolongation',
+        title: t('Error'),
+        text: t('Failed to update prolongation'),
       });
     }
   };
@@ -332,16 +335,16 @@ const ReaderdetailsBorrowings = () => {
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-gray-200">
       <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
       <main className="flex-1 xl:pl-[16rem]">
-        <TopHeader toggleSidebar={toggleSidebar} />
+        <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
           <div className="flex justify-left items-center mb-4 gap-4 items-center">
             <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center" onClick={() => navigate(-1)}>
-              <IoIosArrowBack /> Powrót
+              <IoIosArrowBack /> {t('Back')}
             </button>
-            <h1 className="text-xl font-bold"> Edytuj czytelnika</h1>
+            <h1 className="text-xl font-bold"> {t('Edit Reader')}</h1>
           </div>
           <div className="md:flex">
-            <div className="w-full w-2/5">
+            <div className="w-full md:w-2/5">
               <div className="bg-white shadow-md rounded p-6 h-fit mb-4 dark:bg-primary dark:border-gray-700">
                 <div className="flex flex-col items-center mb-4">
                   <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] mx-auto border-4 border-[#ef4444] mb-5'>
@@ -352,78 +355,78 @@ const ReaderdetailsBorrowings = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full w-3/5 bg-white shadow-md rounded p-8 md:ml-4 dark:bg-primary dark:border-gray-700">
+            <div className="w-full md:w-3/5 bg-white shadow-md rounded p-8 md:ml-4 dark:bg-primary dark:border-gray-700">
               <div className="mx-auto">
                 {borrowings.length === 0 ? (
                   <div>
                     <div className="md:flex justify-between items-center mb-4 gap-4">
-                      <h2 className="text-2xl font-bold mb-4 md:mb-0">Wypożyczenia</h2>
+                      <h2 className="text-2xl font-bold mb-4 md:mb-0">{t('Borrowings')}</h2>
                       <button
                         onClick={handleAddBorrowingClick}
                         className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
                       >
-                        Dodaj wypożyczenie <LuBookPlus />
+                        {t('Add Borrowing')} <LuBookPlus />
                       </button>
                     </div>
                     <div className="flex items-center justify-center text-gray-500 mt-8">
                       <div>
                         <FaInfoCircle className="mb-3 text-[5em] text-center mx-auto" />
-                        <span className="text-2xl">Brak danych do wyświetlenia</span>
+                        <span className="text-2xl">{t('No data available')}</span>
                       </div>
                     </div>
-                    
+
                   </div>
                 ) : (
                   <>
                     <div className="md:flex justify-between items-center mb-4 gap-4">
-                      <h2 className="text-2xl font-bold mb-4 md:mb-0">Wypożyczenia</h2>
+                      <h2 className="text-2xl font-bold mb-4 md:mb-0">{t('Borrowings')}</h2>
                       <button
                         onClick={handleAddBorrowingClick}
                         className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
                       >
-                        Dodaj wypożyczenie <LuBookPlus />
+                        {t('Add Borrowing')} <LuBookPlus />
                       </button>
                     </div>
                     <div className="md:flex items-center mb-4 gap-4">
-                      <p>Pokaż tylko</p>
+                      <p>{t('Show only')}</p>
                       <div className='md:flex gap-5'>
                         <button
                           onClick={() => handleFilterStatus(null, 'all')}
                           className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
-                          Wszystkie <FaBookReader />
+                          {t('All')} <FaBookReader />
                         </button>
                         <button
                           onClick={() => handleFilterStatus('returned', 'returned')}
                           className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
-                          Zwrócone <IoIosReturnLeft />
+                          {t('Returned')} <IoIosReturnLeft />
                         </button>
                         <button
                           onClick={() => handleFilterStatus('pending', 'pending')}
                           className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
-                          Wypożyczone <FaBookReader />
+                          {t('Borrowed')} <FaBookReader />
                         </button>
                       </div>
                     </div>
                     <div className="md:flex items-center mb-4 gap-4">
-                      <label htmlFor="sortField" className="block">Sortuj po:</label>
+                      <label htmlFor="sortField" className="block">{t('Sort by')}:</label>
                       <select
                         id="sortField"
                         value={sortField}
                         onChange={handleSortChange}
                         className="p-2 border rounded dark:bg-gray-800 dark:text-gray-200"
                       >
-                        <option value="id">ID</option>
-                        <option value="borrowing_date">Data wypożyczenia</option>
-                        <option value="status">Status</option>
+                        <option value="id">{t('ID')}</option>
+                        <option value="borrowing_date">{t('Borrowing Date')}</option>
+                        <option value="status">{t('Status')}</option>
                       </select>
                       <button
                         onClick={handleSortOrderChange}
                         className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
                       >
-                        {sortOrder === 'ASC' ? 'Rosnąco' : 'Malejąco'}
+                        {sortOrder === 'ASC' ? t('Ascending') : t('Descending')}
                       </button>
                     </div>
                     {currentBorrowings.map((borrowing) => (
@@ -433,23 +436,23 @@ const ReaderdetailsBorrowings = () => {
                         </div>
                         <div className="md:w-9/12 md:pl-4">
                           <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
-                          <p className="text-gray-600 dark:text-gray-400">Autor: <strong>{borrowing.book?.author}</strong></p>
-                          <p className="text-gray-600 dark:text-gray-400">Borrowing Date: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
-                          <p className="text-gray-600 dark:text-gray-400">Return Date: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? "Not Returned" : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
-                          <p className="text-gray-600 dark:text-gray-400">Comments: <strong>{borrowing.comments || 'No Comments'}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">{t('Author')}: <strong>{borrowing.book?.author}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">{t('Borrowing Date')}: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">{t('Return Date')}: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? t("Not Returned") : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
+                          <p className="text-gray-600 dark:text-gray-400">{t('Comments')}: <strong>{borrowing.comments || t('No Comments')}</strong></p>
                         </div>
                         <div className='md:w-2/12 flex flex-col gap-3'>
                           <button
                             onClick={() => handleReturnBorrowingClick(borrowing.id)}
                             className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
                           >
-                            Zwrot <IoIosReturnLeft />
+                            {t('Return')} <IoIosReturnLeft />
                           </button>
                           <button
                             onClick={() => handleProlongationClick(borrowing.id)}
                             className="items-center justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
                           >
-                            Prolongata <MdWatchLater />
+                            {t('Prolongation')} <MdWatchLater />
                           </button>
                         </div>
                       </div>
@@ -460,19 +463,22 @@ const ReaderdetailsBorrowings = () => {
                       paginate={paginate}
                       currentPage={currentPage}
                       setCurrentPage={setCurrentPage}
+                      t={t}  // Pass the translation function down to the Pagination component
                     />
+
                   </>
                 )}
               </div>
             </div>
           </div>
         </div>
+        <Footer />
       </main>
 
       <Modal isOpen={isAddModalOpen} onClose={handleModalClose} onSave={handleAddBorrowingSave}>
-        <h2 className="text-xl font-bold mb-4">Dodaj wypożyczenie</h2>
+        <h2 className="text-xl font-bold mb-4">{t('Add Borrowing')}</h2>
         <div className="mb-4 relative">
-          <label htmlFor="book_title" className="block mb-2">Book Title:</label>
+          <label htmlFor="book_title" className="block mb-2">{t('Book Title')}:</label>
           <input
             type="text"
             id="book_title"
@@ -496,7 +502,7 @@ const ReaderdetailsBorrowings = () => {
           )}
         </div>
         <div className="mb-4">
-          <label htmlFor="borrowing_date" className="block mb-2">Borrowing Date:</label>
+          <label htmlFor="borrowing_date" className="block mb-2">{t('Borrowing Date')}:</label>
           <input
             type="date"
             id="borrowing_date"
@@ -507,7 +513,7 @@ const ReaderdetailsBorrowings = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="realreturndate" className="block mb-2">Return Date:</label>
+          <label htmlFor="realreturndate" className="block mb-2">{t('Return Date')}:</label>
           <input
             type="date"
             id="realreturndate"
@@ -518,7 +524,7 @@ const ReaderdetailsBorrowings = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="comments" className="block mb-2">Comments:</label>
+          <label htmlFor="comments" className="block mb-2">{t('Comments')}:</label>
           <textarea
             id="comments"
             name="comments"
@@ -530,9 +536,9 @@ const ReaderdetailsBorrowings = () => {
       </Modal>
 
       <Modal isOpen={isReturnModalOpen} onClose={handleModalClose} onSave={handleReturnBorrowingSave}>
-        <h2 className="text-xl font-bold mb-4">Update Return Date</h2>
+        <h2 className="text-xl font-bold mb-4">{t('Update Return Date')}</h2>
         <div className="mb-4">
-          <label htmlFor="realreturndate" className="block mb-2">Return Date:</label>
+          <label htmlFor="realreturndate" className="block mb-2">{t('Return Date')}:</label>
           <input
             type="date"
             id="realreturndate"
@@ -545,9 +551,9 @@ const ReaderdetailsBorrowings = () => {
       </Modal>
 
       <Modal isOpen={isProlongationModalOpen} onClose={handleModalClose} onSave={handleProlongationSave}>
-        <h2 className="text-xl font-bold mb-4">Update Prolongation Date</h2>
+        <h2 className="text-xl font-bold mb-4">{t('Update Prolongation Date')}</h2>
         <div className="mb-4">
-          <label htmlFor="prolongation" className="block mb-2">Prolongation Date:</label>
+          <label htmlFor="prolongation" className="block mb-2">{t('Prolongation Date')}:</label>
           <input
             type="date"
             id="prolongation"
@@ -562,7 +568,7 @@ const ReaderdetailsBorrowings = () => {
   );
 };
 
-const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage, setCurrentPage }) => {
+const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage, setCurrentPage, t }) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalBorrowings / borrowingsPerPage); i++) {
@@ -593,7 +599,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
             onClick={handlePrevPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Prev
+            {t('Prev')}
           </button>
         </li>
         {pageNumbers.map(number => (
@@ -611,7 +617,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
             onClick={handleNextPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Next
+            {t('Next')}
           </button>
         </li>
         <li className={`page-item ${currentPage === pageNumbers.length ? 'hidden' : ''}`}>
@@ -619,7 +625,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
             onClick={handleLastPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Last
+            {t('Last')}
           </button>
         </li>
       </ul>

@@ -6,31 +6,34 @@ import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Skeleton = ({ width, height }) => (
   <div style={{ width, height, backgroundColor: '#e0e0e0' }} className="rounded animate-pulse m-3 mx-0"></div>
 );
 
 const Delays = () => {
+  const { t } = useTranslation('delays'); // Use translation hook for delays namespace
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null); 
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setSidebarOpen(false); // Close sidebar if click outside
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [sidebarRef]);
+  const sidebarRef = useRef(null); // Reference to the sidebar element
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+      setSidebarOpen(!sidebarOpen);
   };
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+      const handleClickOutside = (event) => {
+          if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+              setSidebarOpen(false); // Close sidebar if click outside
+          }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
+  }, [sidebarRef]);
   const navigate = useNavigate();
   const [overdueBooks, setOverdueBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +77,7 @@ const Delays = () => {
     <div className="min-h-screen flex flex-col lg:flex-row font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
       <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
       <main className="flex-1 xl:pl-[16rem]">
-        <TopHeader toggleSidebar={toggleSidebar} />
+        <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
 
           <div className="md:flex items-center mb-6 gap-4">
@@ -82,9 +85,9 @@ const Delays = () => {
               className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
               onClick={() => navigate(-1)}
             >
-              <IoIosArrowBack /> Powrót
+              <IoIosArrowBack /> {t('Back')}
             </button>
-            <h1 className="text-lg md:text-xl font-bold">Zaległości</h1>
+            <h1 className="text-lg md:text-xl font-bold">{t('Delays')}</h1>
           </div>
 
           <div className="grid grid-cols-1 gap-6">
@@ -97,13 +100,13 @@ const Delays = () => {
                     <thead className="text-xs font-semibold uppercase bg-gray-50 dark:bg-gray-700 rounded">
                       <tr>
                         <th className="p-3 md:p-5">
-                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Tytuł</p>
+                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Title')}</p>
                         </th>
                         <th className="p-3 md:p-5">
-                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Czytelnik</p>
+                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Reader')}</p>
                         </th>
                         <th className="p-3 md:p-5">
-                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">Zwłoka</p>
+                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Delay')}</p>
                         </th>
                         <th className="p-3 md:p-5">
                           <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70"></p>
@@ -128,7 +131,7 @@ const Delays = () => {
                           <td className="p-3 md:p-5">
                             <div className="w-max">
                               <div className="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-red-500/20 dark:bg-red-900 text-red-900 dark:text-red-500 py-1 px-2 text-xs rounded-md">
-                                <span>{Math.floor((new Date() - new Date(borrowing.borrowing_date)) / (1000 * 60 * 60 * 24))} dni</span>
+                                <span>{Math.floor((new Date() - new Date(borrowing.borrowing_date)) / (1000 * 60 * 60 * 24))} {t('days')}</span>
                               </div>
                             </div>
                           </td>
@@ -162,6 +165,7 @@ const Delays = () => {
 };
 
 const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage, setCurrentPage }) => {
+  const { t } = useTranslation('delays'); // Use translation hook for delays namespace
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalBorrowings / borrowingsPerPage); i++) {
@@ -192,7 +196,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
             onClick={handlePrevPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Prev
+            {t('Prev')}
           </button>
         </li>
         {pageNumbers.map(number => (
@@ -210,7 +214,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
             onClick={handleNextPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Next
+            {t('Next')}
           </button>
         </li>
         <li className={`page-item ${currentPage === pageNumbers.length ? 'hidden' : ''}`}>
@@ -218,7 +222,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
             onClick={handleLastPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Last
+            {t('Last')}
           </button>
         </li>
       </ul>

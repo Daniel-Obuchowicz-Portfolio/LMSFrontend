@@ -1,0 +1,22 @@
+{
+    "Add Book": "Añadir Libro",
+    "Title": "Título",
+    "Author": "Autor",
+    "ISBN": "ISBN",
+    "Publication Date": "Fecha de Publicación",
+    "Publisher": "Editorial",
+    "Genre": "Género",
+    "Summary": "Resumen",
+    "Page Count": "Número de Páginas",
+    "Cover": "Portada",
+    "Save Changes": "Guardar Cambios",
+    "Success": "Éxito",
+    "Book added successfully": "Libro añadido con éxito",
+    "Error": "Error",
+    "Failed to add book": "No se pudo añadir el libro",
+    "Books Collection": "Colección de libros",
+    "Search": "Buscar",
+    "Details": "Detalles",
+    "Previous": "Anterior",
+    "Next": "Siguiente"
+}

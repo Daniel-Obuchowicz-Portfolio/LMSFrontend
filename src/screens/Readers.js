@@ -7,15 +7,21 @@ import { IoIosArrowBack } from "react-icons/io";
 import { MdOutlineMail, MdLocalPhone } from "react-icons/md";
 import { RiExternalLinkFill } from "react-icons/ri";
 import Footer from '../components/Footer';
+import { useTranslation } from 'react-i18next';
 
 const Readers = () => {
+  const { t } = useTranslation('readers'); // Access translation
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null); 
+  const sidebarRef = useRef(null);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setSidebarOpen(false); // Close sidebar if click outside
+        setSidebarOpen(false);
       }
     };
 
@@ -25,14 +31,10 @@ const Readers = () => {
     };
   }, [sidebarRef]);
 
-  const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
-  };
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -74,7 +76,6 @@ const Readers = () => {
     if (response.ok) {
       const data = await response.json();
       setUsers(data);
-      setIsSearching(true);
     } else {
       console.error('Failed to fetch search results');
     }
@@ -84,7 +85,6 @@ const Readers = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     if (e.target.value === '') {
-      setIsSearching(false);
       fetchUsers();
     }
   };
@@ -113,35 +113,35 @@ const Readers = () => {
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800">
       <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
       <main className="flex-1 xl:pl-[16rem]">
-        <TopHeader toggleSidebar={toggleSidebar} />
+        <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
           <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
             <div className="md:flex items-center gap-4">
               <button
                 className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center mb-4 md:mb-0"
                 onClick={() => navigate(-1)}
-                aria-label="Powrót"
+                aria-label={t('Back')}
               >
-                <IoIosArrowBack /> Powrót
+                <IoIosArrowBack /> {t('Back')}
               </button>
-              <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">Czytelnicy</h1>
+              <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">{t('Readers')}</h1>
             </div>
             <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full md:w-auto">
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder={t('Search...')}
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="w-full md:w-auto px-4 py-2 rounded-lg border border-gray-300 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
               />
-              <button type="submit" className="absolute right-3 text-gray-400" aria-label="Search">
+              <button type="submit" className="absolute right-3 text-gray-400" aria-label={t('Search')}>
                 <FaSearch />
               </button>
             </form>
           </div>
 
           {isLoading ? (
-            <div className="text-center text-gray-700 dark:text-gray-300">Loading...</div>
+            <div className="text-center text-gray-700 dark:text-gray-300">{t('Loading...')}</div>
           ) : (
             <div className="mx-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -163,9 +163,9 @@ const Readers = () => {
                       <Link
                         to={`/readerdetails/${user.id}`}
                         className="w-fit mt-3 px-2 md:px-3 py-1 border rounded items-center gap-1 py-1.5 flex text-center leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
-                        aria-label={`Details for ${user.first_name} ${user.last_name}`}
+                        aria-label={t('Details for {{name}}', { name: `${user.first_name} ${user.last_name}` })}
                       >
-                        Szczegóły <RiExternalLinkFill />
+                        {t('Details')} <RiExternalLinkFill />
                       </Link>
                     </div>
                   </div>
@@ -188,6 +188,7 @@ const Readers = () => {
 };
 
 const Pagination = ({ usersPerPage, totalUsers, paginate, currentPage, setCurrentPage }) => {
+  const { t } = useTranslation();
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalUsers / usersPerPage); i++) {
@@ -218,7 +219,7 @@ const Pagination = ({ usersPerPage, totalUsers, paginate, currentPage, setCurren
             onClick={handlePrevPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 flex text-center leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Prev
+            {t('Prev')}
           </button>
         </li>
         {pageNumbers.map(number => (
@@ -236,7 +237,7 @@ const Pagination = ({ usersPerPage, totalUsers, paginate, currentPage, setCurren
             onClick={handleNextPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 flex text-center leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Next
+            {t('Next')}
           </button>
         </li>
         <li className={`page-item ${currentPage === pageNumbers.length ? 'hidden' : ''}`}>
@@ -244,7 +245,7 @@ const Pagination = ({ usersPerPage, totalUsers, paginate, currentPage, setCurren
             onClick={handleLastPage}
             className="px-3 py-1 border rounded items-center gap-1 py-1.5 flex text-center leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
           >
-            Last
+            {t('Last')}
           </button>
         </li>
       </ul>

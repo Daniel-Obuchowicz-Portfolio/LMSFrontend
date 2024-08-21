@@ -1,0 +1,24 @@
+{
+    "Add Book": "Add Book",
+    "Title": "Title",
+    "Author": "Author",
+    "ISBN": "ISBN",
+    "Publication Date": "Publication Date",
+    "Publisher": "Publisher",
+    "Genre": "Genre",
+    "Summary": "Summary",
+    "Page Count": "Page Count",
+    "Cover": "Cover",
+    "Save Changes": "Save Changes",
+    "Success": "Success",
+    "Book added successfully": "Book added successfully",
+    "Error": "Error",
+    "Failed to add book": "Failed to add book",
+    "Back": "Back",
+    "Books Collection": "Books Collection",
+    "Search": "Search",
+    "Details": "Details",
+    "Previous": "Previous",
+    "Next": "Next"
+  }
+  

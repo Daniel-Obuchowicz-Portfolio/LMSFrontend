@@ -1,0 +1,26 @@
+{
+    "Error": "Error",
+    "Failed to fetch book data": "Failed to fetch book data",
+    "Success": "Success",
+    "Book updated successfully": "Book updated successfully",
+    "Failed to update book": "Failed to update book",
+    "Back": "Back",
+    "Edit Book": "Edit Book",
+    "Quick Info": "Quick Info",
+    "Author": "Author",
+    "Recent Borrowings": "Recent Borrowings",
+    "No data available": "No data available",
+    "Borrow Date": "Borrow Date",
+    "Return Date": "Return Date",
+    "Book Information": "Book Information",
+    "Title": "Title",
+    "ISBN": "ISBN",
+    "Publication Date": "Publication Date",
+    "Publisher": "Publisher",
+    "Genre": "Genre",
+    "Summary": "Summary",
+    "Page Count": "Page Count",
+    "Cover": "Cover",
+    "Save changes": "Save changes"
+  }
+  

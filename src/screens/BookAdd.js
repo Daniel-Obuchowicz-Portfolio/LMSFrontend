@@ -1,35 +1,35 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Menu from '../components/Header';
 import TopHeader from '../components/TopHeader';
 import Swal from 'sweetalert2';
 import { IoIosArrowBack } from "react-icons/io";
 import Footer from '../components/Footer';
+import { useTranslation } from 'react-i18next';  // Import useTranslation
 
 const BookAdd = () => {
+  const { t } = useTranslation('books');  // Initialize useTranslation for 'books' namespace
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const sidebarRef = useRef(null); 
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setSidebarOpen(false); // Close sidebar if click outside
-      }
-    };
+  const toggleSidebar = () => {
+      setSidebarOpen(!sidebarOpen);
+  };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+  useEffect(() => {
+      const handleClickOutside = (event) => {
+          if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+              setSidebarOpen(false);
+          }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
   }, [sidebarRef]);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-  const { id } = useParams();
   const [book, setBook] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
 
@@ -59,7 +59,6 @@ const BookAdd = () => {
       };
       reader.onerror = error => console.log('Error: ', error);
     } else {
-      // Submit without a profile picture
       await submitBookData(book, token);
     }
   };
@@ -77,14 +76,14 @@ const BookAdd = () => {
     if (response.ok) {
       Swal.fire({
         icon: 'success',
-        title: 'Success',
-        text: 'Book added successfully',
+        title: t('Success'),
+        text: t('Book added successfully'),
       });
     } else {
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'Failed to add book',
+        title: t('Error'),
+        text: t('Failed to add book'),
       });
     }
   };
@@ -93,16 +92,16 @@ const BookAdd = () => {
     <div className="min-h-screen flex font-montserrat bg-[#f6f5ff] dark:bg-gray-800 dark:text-white">
       <Menu sidebar={sidebarOpen} toggleSidebar={toggleSidebar} sidebarRef={sidebarRef} />
       <main className="flex-1 xl:pl-[16rem]">
-        <TopHeader toggleSidebar={toggleSidebar} />
+        <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
           <div className="md:flex items-center mb-6 gap-4">
             <button
               className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
               onClick={() => navigate(-1)}
             >
-              <IoIosArrowBack /> Powrót
+              <IoIosArrowBack /> {t('Back')}
             </button>
-            <h1 className="text-xl font-bold">Dodaj Książkę</h1>
+            <h1 className="text-xl font-bold">{t('Add Book')}</h1>
           </div>
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-2/5 bg-white dark:bg-primary shadow-md rounded p-6 h-fit mb-4 md:mb-0">
@@ -113,15 +112,15 @@ const BookAdd = () => {
                   </div>
                 </div>
                 <h3 className="text-xl font-bold dark:text-white">{book?.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300">Author: {book?.author}</p>
+                <p className="text-gray-600 dark:text-gray-300">{t('Author')}: {book?.author}</p>
               </div>
             </div>
             <div className="w-full md:w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 md:ml-4">
               <div className="mx-auto">
-                <h2 className="text-2xl font-bold mb-4 dark:text-white">Informacje o książce</h2>
+                <h2 className="text-2xl font-bold mb-4 dark:text-white">{t('Book Information')}</h2>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Tytuł</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Title')}</label>
                     <input
                       type="text"
                       name="title"
@@ -131,7 +130,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Autor</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Author')}</label>
                     <input
                       type="text"
                       name="author"
@@ -141,7 +140,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">ISBN</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('ISBN')}</label>
                     <input
                       type="text"
                       name="isbn"
@@ -151,7 +150,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Data Publikacji</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Publication Date')}</label>
                     <input
                       type="date"
                       name="publicationDate"
@@ -161,7 +160,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Wydawca</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Publisher')}</label>
                     <input
                       type="text"
                       name="publisher"
@@ -171,7 +170,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Gatunek</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Genre')}</label>
                     <input
                       type="text"
                       name="genre"
@@ -181,7 +180,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Streszczenie</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Summary')}</label>
                     <textarea
                       name="summary"
                       value={book?.summary}
@@ -190,7 +189,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Liczba Stron</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Page Count')}</label>
                     <input
                       type="number"
                       name="pageCount"
@@ -200,7 +199,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 dark:text-gray-300">Okładka</label>
+                    <label className="block text-gray-700 dark:text-gray-300">{t('Cover')}</label>
                     <input
                       name='profile_picture_p'
                       type="file"
@@ -209,7 +208,7 @@ const BookAdd = () => {
                     />
                   </div>
                   <button type="submit" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                    Zapisz zmiany
+                    {t('Save Changes')}
                   </button>
                 </form>
               </div>
