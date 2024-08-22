@@ -94,17 +94,17 @@ const ReaderAdd = () => {
       <main className="flex-1 xl:pl-[16rem]">
         <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="md:flex items-center mb-6 gap-4">
+          <div className="xl:flex items-center mb-6 gap-4">
             <button
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm xl:text-base mb-4 xl:mb-0"
               onClick={() => navigate(-1)}
             >
               <IoIosArrowBack /> {t('Back')}
             </button>
             <h1 className="text-xl font-bold">{t('Add New Reader')}</h1>
           </div>
-          <div className="md:flex">
-            <div className="md:w-2/5 bg-white dark:bg-primary shadow-md rounded p-6 h-fit">
+          <div className="xl:flex">
+            <div className="xl:w-2/5 bg-white dark:bg-primary shadow-md rounded p-6 h-fit">
               <div className="flex flex-col items-center mb-4">
                 <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] dark:bg-gray-700 mx-auto border-4 border-[#ef4444] mb-5'>
                   <img className="w-[132px] h-[132px] rounded-full mb-4 object-cover" src={user?.profile_picture || '/img/profile-icon-design.jpg'} alt={`${user?.first_name} ${user?.last_name}`} />
@@ -113,7 +113,7 @@ const ReaderAdd = () => {
                 <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
               </div>
             </div>
-            <div className="md:w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 md:ml-4 mt-4 md:mt-0">
+            <div className="xl:w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 xl:ml-4 mt-4 xl:mt-0">
               <div className="mx-auto">
                 <h2 className="text-2xl font-bold mb-4">{t('Edit Information')}</h2>
                 <form onSubmit={handleSubmit}>

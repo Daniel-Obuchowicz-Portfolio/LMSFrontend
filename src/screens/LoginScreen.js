@@ -1,4 +1,3 @@
-// src/LoginForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -33,17 +32,16 @@ const LoginForm = () => {
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-lg">
         <div>
           <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Welcome back</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-             Don’t have an account?{' '}
-            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Sign up.
+            Don’t have an account?{' '}
+            <a href="#" onClick={() => navigate('/register')} className="font-medium text-indigo-600 hover:text-indigo-500">
+              Register now
             </a>
           </p>
         </div>
         <form className="mt-0 space-y-6" onSubmit={handleSubmit}>
-        {error && <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:text-red-400">{error}</div>}
-          <input type="hidden" name="remember" value="true" />
+          {error && <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:text-red-400">{error}</div>}
           <div className="rounded-md shadow-sm -space-y-px">
             <div className='mb-5'>
               <label htmlFor="email-address" className="sr-only">Email address</label>
@@ -75,7 +73,6 @@ const LoginForm = () => {
             </div>
           </div>
 
-          
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -101,7 +98,7 @@ const LoginForm = () => {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign in to your account
+              Sign in
             </button>
           </div>
           <div className="flex items-center justify-between">

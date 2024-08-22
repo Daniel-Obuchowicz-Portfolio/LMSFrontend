@@ -13,6 +13,7 @@ import Search from './screens/Search';
 import ReaderdetailsBorrowings from './screens/ReaderdetailsBorrowings';
 import Delays from './screens/Delays';
 import Settings from './screens/Settings';
+import RegisterForm from './screens/RegisterScreen';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path="/search" element={<Search />} />
       <Route path="/delays" element={<Delays />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/register" element={<RegisterForm />} />
     </Routes>
   );
 }

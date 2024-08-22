@@ -1,8 +1,8 @@
 {
-    "Settings": "Paramètres",
-    "Change Language": "Changer de langue",
-    "Dark Mode": "Mode sombre",
-    "Enable Dark Mode": "Activer le mode sombre",
-    "Dark Mode Enabled": "Mode sombre activé"
-  }
-  
+  "Back": "Retour",
+  "Settings": "Paramètres",
+  "Change Language": "Changer de langue",
+  "Dark Mode": "Mode sombre",
+  "Dark Mode Enabled": "Mode sombre activé",
+  "Enable Dark Mode": "Activer le mode sombre"
+}

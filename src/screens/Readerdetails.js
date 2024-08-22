@@ -168,18 +168,18 @@ const Readerdetails = () => {
       <main className="flex-1 xl:pl-[16rem]">
         <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="md:flex items-center mb-6 gap-4">
+          <div className="xl:flex items-center mb-6 gap-4">
             <button
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm xl:text-base mb-4 xl:mb-0"
               onClick={() => navigate(-1)}
             >
               <IoIosArrowBack /> {t('Back')}
             </button>
-            <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">{t('Edit Reader')}</h1>
+            <h1 className="text-lg xl:text-xl font-bold text-gray-900 dark:text-white">{t('Edit Reader')}</h1>
           </div>
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="lg:w-2/5 flex flex-col gap-6">
-              <div className="bg-white dark:bg-primary shadow-md rounded p-4 md:p-6">
+              <div className="bg-white dark:bg-primary shadow-md rounded p-4 xl:p-6">
                 <div className="flex flex-col items-center mb-4">
                   <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] dark:bg-gray-900 mx-auto border-4 border-[#ef4444] mb-5'>
                     <img
@@ -188,13 +188,13 @@ const Readerdetails = () => {
                       alt={`${user?.first_name} ${user?.last_name}`}
                     />
                   </div>
-                  <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">{user?.first_name} {user?.last_name}</h3>
+                  <h3 className="text-lg xl:text-xl font-bold text-gray-900 dark:text-white">{user?.first_name} {user?.last_name}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300">{user?.email}</p>
                 </div>
               </div>
-              <div className="bg-white dark:bg-primary shadow-md rounded p-4 md:p-6">
-                <div className="md:flex justify-between items-center mb-4">
-                  <h2 className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white mb-4 md:mb-0">{t('Recent Borrowings')}</h2>
+              <div className="bg-white dark:bg-primary shadow-md rounded p-4 xl:p-6">
+                <div className="xl:flex justify-between items-center mb-4">
+                  <h2 className="text-lg xl:text-2xl font-bold text-gray-900 dark:text-white mb-4 xl:mb-0">{t('Recent Borrowings')}</h2>
                   <Link
                     to={`/readerdetails/${user?.id}/borrowings`}
                     className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
@@ -209,16 +209,16 @@ const Readerdetails = () => {
                   </div>
                 ) : (
                   borrowings.map((borrowing) => (
-                    <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded dark:border-gray-700">
-                      <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
+                    <div key={borrowing.id} className="flex flex-col xl:flex-row mb-4 p-4 border rounded dark:border-gray-700">
+                      <div className="xl:w-1/12 flex justify-center xl:justify-start mb-4 xl:mb-0">
                         <img
-                          className="w-[10vh] md:w-full object-cover"
+                          className="w-[10vh] xl:w-full object-cover"
                           src={borrowing.book.coverImage || '/img/blank-book-cover-over-png.png'}
                           alt={borrowing.book.title}
                         />
                       </div>
-                      <div className="md:w-11/12 md:pl-4">
-                        <h2 className="font-bold text-lg md:text-2xl mb-3 text-gray-900 dark:text-white">{borrowing.book.title}</h2>
+                      <div className="xl:w-11/12 xl:pl-4">
+                        <h2 className="font-bold text-lg xl:text-2xl mb-3 text-gray-900 dark:text-white">{borrowing.book.title}</h2>
                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">{t('Author')}: <strong>{borrowing.book.author}</strong></p>
                       </div>
                     </div>
@@ -226,9 +226,9 @@ const Readerdetails = () => {
                 )}
               </div>
             </div>
-            <div className="lg:w-3/5 bg-white dark:bg-primary shadow-md rounded p-4 md:p-8">
+            <div className="lg:w-3/5 bg-white dark:bg-primary shadow-md rounded p-4 xl:p-8">
               <div className="mx-auto">
-                <h2 className="text-lg md:text-2xl font-bold mb-4 text-gray-900 dark:text-white">{t('Edit Information')}</h2>
+                <h2 className="text-lg xl:text-2xl font-bold mb-4 text-gray-900 dark:text-white">{t('Edit Information')}</h2>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4">
                     <label className="block text-gray-700 dark:text-gray-300">{t('First Name')}</label>

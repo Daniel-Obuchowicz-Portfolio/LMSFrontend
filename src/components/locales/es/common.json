@@ -33,5 +33,8 @@
   "Library": "Biblioteca",
   "Add Book": "Agregar libro",
   "Delays": "Retrasos",
-  "Settings": "Configuraciones"
+  "Bibliotekarz": "Bibliotecario", 
+  "Settings": "Configuraciones",
+  "More Options": "Más opciones",
+  "Log Out": "Cerrar sesión"
 }

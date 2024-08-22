@@ -322,8 +322,8 @@ const Dashboard = () => {
           {/* Charts and Additional Information */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className="md:flex justify-between items-center">
-                <h2 className="font-semibold text-2xl dark:text-white mb-4 md:mb-0">{t('New Readers')}</h2>
+              <div className="xl:flex justify-between items-center">
+                <h2 className="font-semibold text-2xl dark:text-white mb-4 xl:mb-0">{t('New Readers')}</h2>
                 <Link
                   to="/readers"
                   className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none w-fit"
@@ -423,8 +423,8 @@ const Dashboard = () => {
               )}
             </div>
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className="md:flex justify-between items-center">
-                <h2 className="font-semibold text-2xl dark:text-white mb-4 md:mb-0">{t('New Books')}</h2>
+              <div className="xl:flex justify-between items-center">
+                <h2 className="font-semibold text-2xl dark:text-white mb-4 xl:mb-0">{t('New Books')}</h2>
                 <Link
                   to="/books"
                   className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none w-fit"
@@ -514,7 +514,7 @@ const Dashboard = () => {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className="md:flex justify-between items-center">
+              <div className="xl:flex justify-between items-center">
                 <h2 className="font-semibold text-2xl dark:text-white">{t('New Readers & Borrowings')}</h2>
               </div>
               {isLoading ? (
@@ -526,8 +526,8 @@ const Dashboard = () => {
               )}
             </div>
             <div className="bg-white dark:bg-primary p-4 rounded-lg shadow-md">
-              <div className="md:flex justify-between items-center">
-                <h2 className="font-semibold text-2xl dark:text-white mb-4 md:mb-0">{t('Overdue')}</h2>
+              <div className="xl:flex justify-between items-center">
+                <h2 className="font-semibold text-2xl dark:text-white mb-4 xl:mb-0">{t('Overdue')}</h2>
                 <Link
                   to="/delays"
                   className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none w-fit"

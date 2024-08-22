@@ -80,18 +80,18 @@ const Delays = () => {
         <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
 
-          <div className="md:flex items-center mb-6 gap-4">
+          <div className="xl:flex items-center mb-6 gap-4">
             <button
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm xl:text-base mb-4 xl:mb-0"
               onClick={() => navigate(-1)}
             >
               <IoIosArrowBack /> {t('Back')}
             </button>
-            <h1 className="text-lg md:text-xl font-bold">{t('Delays')}</h1>
+            <h1 className="text-lg xl:text-xl font-bold">{t('Delays')}</h1>
           </div>
 
           <div className="grid grid-cols-1 gap-6">
-            <div className="bg-white dark:bg-primary rounded-lg shadow-md p-4 md:p-5">
+            <div className="bg-white dark:bg-primary rounded-lg shadow-md p-4 xl:p-5">
               {isLoading ? (
                 <Skeleton width="100%" height="200px" />
               ) : (
@@ -99,44 +99,44 @@ const Delays = () => {
                   <table className="w-full min-w-max table-auto text-left font-montserrat">
                     <thead className="text-xs font-semibold uppercase bg-gray-50 dark:bg-gray-700 rounded">
                       <tr>
-                        <th className="p-3 md:p-5">
-                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Title')}</p>
+                        <th className="p-3 xl:p-5">
+                          <p className="text-sm xl:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Title')}</p>
                         </th>
-                        <th className="p-3 md:p-5">
-                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Reader')}</p>
+                        <th className="p-3 xl:p-5">
+                          <p className="text-sm xl:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Reader')}</p>
                         </th>
-                        <th className="p-3 md:p-5">
-                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Delay')}</p>
+                        <th className="p-3 xl:p-5">
+                          <p className="text-sm xl:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70">{t('Delay')}</p>
                         </th>
-                        <th className="p-3 md:p-5">
-                          <p className="text-sm md:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70"></p>
+                        <th className="p-3 xl:p-5">
+                          <p className="text-sm xl:text-base text-blue-gray-900 dark:text-gray-300 font-normal leading-none opacity-70"></p>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentBorrowings.map(borrowing => (
                         <tr key={borrowing.id}>
-                          <td className="p-3 md:p-5">
-                            <div className="flex items-center gap-4 md:gap-6">
-                              <img src={borrowing.book.coverImage || '/img/blank-book-cover-over-png.png'} alt={`${borrowing.book.title} cover`} className="w-8 md:w-10 object-contain" />
-                              <p className="text-sm md:text-base font-bold text-blue-gray-900 dark:text-gray-300">{borrowing.book.title}</p>
+                          <td className="p-3 xl:p-5">
+                            <div className="flex items-center gap-4 xl:gap-6">
+                              <img src={borrowing.book.coverImage || '/img/blank-book-cover-over-png.png'} alt={`${borrowing.book.title} cover`} className="w-8 xl:w-10 object-contain" />
+                              <p className="text-sm xl:text-base font-bold text-blue-gray-900 dark:text-gray-300">{borrowing.book.title}</p>
                             </div>
                           </td>
-                          <td className="p-3 md:p-5">
-                            <div className="flex items-center gap-4 md:gap-6">
-                              <img src={borrowing.user.profile_picture || '/img/profile-icon-design.jpg'} alt={`${borrowing.user.first_name}'s profile`} className="w-10 md:w-12 h-10 md:h-12 rounded-full object-cover" />
-                              <p className="text-sm md:text-base font-bold text-blue-gray-900 dark:text-gray-300">{borrowing.user.first_name} {borrowing.user.last_name}</p>
+                          <td className="p-3 xl:p-5">
+                            <div className="flex items-center gap-4 xl:gap-6">
+                              <img src={borrowing.user.profile_picture || '/img/profile-icon-design.jpg'} alt={`${borrowing.user.first_name}'s profile`} className="w-10 xl:w-12 h-10 xl:h-12 rounded-full object-cover" />
+                              <p className="text-sm xl:text-base font-bold text-blue-gray-900 dark:text-gray-300">{borrowing.user.first_name} {borrowing.user.last_name}</p>
                             </div>
                           </td>
-                          <td className="p-3 md:p-5">
+                          <td className="p-3 xl:p-5">
                             <div className="w-max">
                               <div className="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-red-500/20 dark:bg-red-900 text-red-900 dark:text-red-500 py-1 px-2 text-xs rounded-md">
                                 <span>{Math.floor((new Date() - new Date(borrowing.borrowing_date)) / (1000 * 60 * 60 * 24))} {t('days')}</span>
                               </div>
                             </div>
                           </td>
-                          <td className="p-3 md:p-5">
-                            <Link to={`/readerdetails/${borrowing.user.id}`} className="relative w-8 h-8 md:w-10 md:h-10 rounded-lg text-gray-900 dark:text-gray-300 hover:bg-gray-900/10 dark:hover:bg-gray-300/10 flex items-center justify-center">
+                          <td className="p-3 xl:p-5">
+                            <Link to={`/readerdetails/${borrowing.user.id}`} className="relative w-8 h-8 xl:w-10 xl:h-10 rounded-lg text-gray-900 dark:text-gray-300 hover:bg-gray-900/10 dark:hover:bg-gray-300/10 flex items-center justify-center">
                               <MdArrowForwardIos className="h-4 w-4" />
                             </Link>
                           </td>
@@ -200,7 +200,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
           </button>
         </li>
         {pageNumbers.map(number => (
-          <li key={number} className="page-item hidden md:block">
+          <li key={number} className="page-item hidden xl:block">
             <button
               onClick={() => paginate(number)}
               className={`px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${currentPage === number ? 'bg-red-700 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}

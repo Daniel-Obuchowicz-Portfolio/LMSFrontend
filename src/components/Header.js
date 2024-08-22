@@ -29,7 +29,7 @@ const Menu = ({ sidebar, toggleSidebar, sidebarRef }) => {
         <aside
             ref={sidebarRef}
             id="sidebar-menu"
-            className={`fixed transition-transform duration-300 ease-in-out h-screen bg-white bg-cover bg-[url('https://wallpapers.com/images/hd/minimalist-phone-1440-x-2560-background-l50nd91jwe8kergc.jpg')] shadow-sm w-64 z-50 transform ${sidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+            className={`fixed transition-transform duration-300 ease-in-out h-screen bg-white bg-cover bg-[url('https://wallpapers.com/images/hd/minimalist-phone-1440-x-2560-background-l50nd91jwe8kergc.jpg')] shadow-sm w-64 z-50 transform ${sidebar ? 'translate-x-0' : '-translate-x-full'} xl:translate-x-0`}
         >
             <div className="h-full overflow-y-auto scrollbars">
                 {/* Logo */}

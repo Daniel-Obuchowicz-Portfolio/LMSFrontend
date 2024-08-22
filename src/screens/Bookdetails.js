@@ -144,17 +144,17 @@ const BookDetails = () => {
       <main className="flex-1 xl:pl-[16rem]">
         <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="md:flex items-center mb-6 gap-4">
+          <div className="xl:flex items-center mb-6 gap-4">
             <button
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm xl:text-base mb-4 xl:mb-0"
               onClick={() => navigate(-1)}
             >
               <IoIosArrowBack /> {t('Back')} {/* Use t for translations */}
             </button>
             <h1 className="text-xl font-bold">{t('Edit Book')}</h1> {/* Use t for translations */}
           </div>
-          <div className="md:flex">
-            <div className="md:w-2/5">
+          <div className="xl:flex">
+            <div className="xl:w-2/5">
               <div className="bg-white dark:bg-primary shadow-md rounded p-6 h-fit">
                 <h2 className="text-xl font-bold mb-4 text-left dark:text-white">{t('Quick Info')}</h2> {/* Use t for translations */}
                 <div className="flex flex-col items-center mb-4">
@@ -177,7 +177,7 @@ const BookDetails = () => {
                 ) : (
                   <div className="min-w-full">
                     {borrowings.map(borrowing => (
-                      <div key={borrowing.id} className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4 border-b border-gray-200 dark:border-gray-600">
+                      <div key={borrowing.id} className="grid grid-cols-1 xl:grid-cols-2 gap-6 py-4 border-b border-gray-200 dark:border-gray-600">
                         <div className="flex items-center gap-6">
                           <img
                             src={borrowing.user.profile_picture}
@@ -210,7 +210,7 @@ const BookDetails = () => {
                 )}
               </div>
             </div>
-            <div className="md:w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 md:ml-4 h-fit mt-4 md:mt-0">
+            <div className="xl:w-3/5 bg-white dark:bg-primary shadow-md rounded p-8 xl:ml-4 h-fit mt-4 xl:mt-0">
               <div className="mx-auto">
                 <h2 className="text-2xl font-bold mb-4 dark:text-white">{t('Book Information')}</h2> {/* Use t for translations */}
                 <form onSubmit={handleSubmit}>

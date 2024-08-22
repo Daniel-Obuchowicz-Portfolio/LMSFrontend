@@ -110,10 +110,10 @@ const Books = () => {
       <main className="flex-1 xl:pl-[16rem]">
         <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="md:flex justify-between items-center mb-4">
-            <div className="md:flex items-center mb-6 gap-4">
+          <div className="xl:flex justify-between items-center mb-4">
+            <div className="xl:flex items-center mb-6 gap-4">
               <button
-                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm xl:text-base mb-4 xl:mb-0"
                 onClick={() => navigate(-1)}
               >
                 <IoIosArrowBack /> {t('Back')}

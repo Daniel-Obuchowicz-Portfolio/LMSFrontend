@@ -1,6 +1,8 @@
 {
-    "Back": "Regresar",
-    "Save": "Guardar",
-    "Cancel": "Cancelar"
-  }
-  
+  "Back": "Atrás",
+  "Settings": "Configuraciones",
+  "Change Language": "Cambiar idioma",
+  "Dark Mode": "Modo oscuro",
+  "Dark Mode Enabled": "Modo oscuro habilitado",
+  "Enable Dark Mode": "Habilitar modo oscuro"
+}

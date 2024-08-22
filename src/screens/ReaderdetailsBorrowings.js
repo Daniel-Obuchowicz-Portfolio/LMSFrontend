@@ -343,8 +343,8 @@ const ReaderdetailsBorrowings = () => {
             </button>
             <h1 className="text-xl font-bold"> {t('Edit Reader')}</h1>
           </div>
-          <div className="md:flex">
-            <div className="w-full md:w-2/5">
+          <div className="xl:flex">
+            <div className="w-full xl:w-2/5">
               <div className="bg-white shadow-md rounded p-6 h-fit mb-4 dark:bg-primary dark:border-gray-700">
                 <div className="flex flex-col items-center mb-4">
                   <div className='w-[140px] h-[140px] rounded-full bg-[#ffffff] mx-auto border-4 border-[#ef4444] mb-5'>
@@ -355,12 +355,12 @@ const ReaderdetailsBorrowings = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-3/5 bg-white shadow-md rounded p-8 md:ml-4 dark:bg-primary dark:border-gray-700">
+            <div className="w-full xl:w-3/5 bg-white shadow-md rounded p-8 xl:ml-4 dark:bg-primary dark:border-gray-700">
               <div className="mx-auto">
                 {borrowings.length === 0 ? (
                   <div>
-                    <div className="md:flex justify-between items-center mb-4 gap-4">
-                      <h2 className="text-2xl font-bold mb-4 md:mb-0">{t('Borrowings')}</h2>
+                    <div className="xl:flex justify-between items-center mb-4 gap-4">
+                      <h2 className="text-2xl font-bold mb-4 xl:mb-0">{t('Borrowings')}</h2>
                       <button
                         onClick={handleAddBorrowingClick}
                         className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
@@ -378,8 +378,8 @@ const ReaderdetailsBorrowings = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="md:flex justify-between items-center mb-4 gap-4">
-                      <h2 className="text-2xl font-bold mb-4 md:mb-0">{t('Borrowings')}</h2>
+                    <div className="xl:flex justify-between items-center mb-4 gap-4">
+                      <h2 className="text-2xl font-bold mb-4 xl:mb-0">{t('Borrowings')}</h2>
                       <button
                         onClick={handleAddBorrowingClick}
                         className="items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
@@ -387,30 +387,30 @@ const ReaderdetailsBorrowings = () => {
                         {t('Add Borrowing')} <LuBookPlus />
                       </button>
                     </div>
-                    <div className="md:flex items-center mb-4 gap-4">
+                    <div className="xl:flex items-center mb-4 gap-4">
                       <p>{t('Show only')}</p>
-                      <div className='md:flex gap-5'>
+                      <div className='xl:flex gap-5'>
                         <button
                           onClick={() => handleFilterStatus(null, 'all')}
-                          className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
+                          className={`items-center mb-4 xl:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'all' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
                           {t('All')} <FaBookReader />
                         </button>
                         <button
                           onClick={() => handleFilterStatus('returned', 'returned')}
-                          className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
+                          className={`items-center mb-4 xl:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'returned' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
                           {t('Returned')} <IoIosReturnLeft />
                         </button>
                         <button
                           onClick={() => handleFilterStatus('pending', 'pending')}
-                          className={`items-center mb-4 md:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
+                          className={`items-center mb-4 xl:mb-0 gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${activeFilter === 'pending' ? 'bg-gray-500 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}
                         >
                           {t('Borrowed')} <FaBookReader />
                         </button>
                       </div>
                     </div>
-                    <div className="md:flex items-center mb-4 gap-4">
+                    <div className="xl:flex items-center mb-4 gap-4">
                       <label htmlFor="sortField" className="block">{t('Sort by')}:</label>
                       <select
                         id="sortField"
@@ -430,18 +430,18 @@ const ReaderdetailsBorrowings = () => {
                       </button>
                     </div>
                     {currentBorrowings.map((borrowing) => (
-                      <div key={borrowing.id} className="flex flex-col md:flex-row mb-4 p-4 border rounded dark:bg-gray-800 dark:border-gray-700">
-                        <div className="md:w-1/12 flex justify-center md:justify-start mb-4 md:mb-0">
-                          <img className="w-[10vh] md:w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
+                      <div key={borrowing.id} className="flex flex-col xl:flex-row mb-4 p-4 border rounded dark:bg-gray-800 dark:border-gray-700">
+                        <div className="xl:w-1/12 flex justify-center xl:justify-start mb-4 xl:mb-0">
+                          <img className="w-[10vh] xl:w-full object-contain" src={borrowing.book?.coverImage || '/img/blank-book-cover-over-png.png'} alt={borrowing.book?.title} />
                         </div>
-                        <div className="md:w-9/12 md:pl-4">
+                        <div className="xl:w-9/12 xl:pl-4">
                           <h2 className="font-bold text-xl">{borrowing.book?.title}</h2>
                           <p className="text-gray-600 dark:text-gray-400">{t('Author')}: <strong>{borrowing.book?.author}</strong></p>
                           <p className="text-gray-600 dark:text-gray-400">{t('Borrowing Date')}: <strong>{borrowing.borrowing_date ? new Date(borrowing.borrowing_date).toLocaleDateString() : 'N/A'}</strong></p>
                           <p className="text-gray-600 dark:text-gray-400">{t('Return Date')}: <strong className={`${borrowing.status === "pending" ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'} font-medium me-2 px-2.5 py-0.5 rounded`}>{borrowing.status === "pending" ? t("Not Returned") : borrowing.realreturndate ? new Date(borrowing.realreturndate).toLocaleDateString() : 'N/A'}</strong></p>
                           <p className="text-gray-600 dark:text-gray-400">{t('Comments')}: <strong>{borrowing.comments || t('No Comments')}</strong></p>
                         </div>
-                        <div className='md:w-2/12 flex flex-col gap-3'>
+                        <div className='xl:w-2/12 flex flex-col gap-3'>
                           <button
                             onClick={() => handleReturnBorrowingClick(borrowing.id)}
                             className="items-center mb-3 justify-between w-full gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
@@ -603,7 +603,7 @@ const Pagination = ({ borrowingsPerPage, totalBorrowings, paginate, currentPage,
           </button>
         </li>
         {pageNumbers.map(number => (
-          <li key={number} className="page-item hidden md:block">
+          <li key={number} className="page-item hidden xl:block">
             <button
               onClick={() => paginate(number)}
               className={`px-3 py-1 border rounded items-center gap-1 py-1.5 px-2.5 flex text-center rounded leading-5 ${currentPage === number ? 'bg-red-700 text-white' : 'text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600'}`}

@@ -13,6 +13,14 @@ const Readers = () => {
   const { t } = useTranslation('readers'); // Access translation
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(8);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(''); // Add error state
+
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -31,29 +39,28 @@ const Readers = () => {
     };
   }, [sidebarRef]);
 
-  const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage] = useState(8);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-
-  const navigate = useNavigate();
-
   const fetchUsers = async () => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    setIsLoading(true);
+    setError('');
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+
       const data = await response.json();
       setUsers(data);
-      setIsLoading(false);
-    } else {
-      console.error('Failed to fetch user data');
+    } catch (error) {
+      console.error(error);
+      setError('There was a problem loading the readers.');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -65,21 +72,28 @@ const Readers = () => {
   const fetchSearchResults = async (query) => {
     if (!query) return;
     setIsLoading(true);
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/usersearch?query=${query}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    setError('');
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/usersearch?query=${query}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Failed to fetch search results');
+      }
+
       const data = await response.json();
       setUsers(data);
-    } else {
-      console.error('Failed to fetch search results');
+    } catch (error) {
+      console.error(error);
+      setError('There was a problem loading the search results.');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleSearchChange = (e) => {
@@ -116,29 +130,31 @@ const Readers = () => {
         <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
           <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
-            <div className="md:flex items-center gap-4">
+            <div className="xl:flex items-center gap-4">
               <button
-                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center mb-4 md:mb-0"
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-3 items-center mb-4 xl:mb-0"
                 onClick={() => navigate(-1)}
                 aria-label={t('Back')}
               >
                 <IoIosArrowBack /> {t('Back')}
               </button>
-              <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">{t('Readers')}</h1>
+              <h1 className="text-lg xl:text-xl font-bold text-gray-900 dark:text-white">{t('Readers')}</h1>
             </div>
-            <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full md:w-auto">
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full xl:w-auto">
               <input
                 type="text"
                 placeholder={t('Search...')}
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full md:w-auto px-4 py-2 rounded-lg border border-gray-300 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                className="w-full xl:w-auto px-4 py-2 rounded-lg border border-gray-300 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
               />
               <button type="submit" className="absolute right-3 text-gray-400" aria-label={t('Search')}>
                 <FaSearch />
               </button>
             </form>
           </div>
+
+          {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
           {isLoading ? (
             <div className="text-center text-gray-700 dark:text-gray-300">{t('Loading...')}</div>
@@ -148,21 +164,21 @@ const Readers = () => {
                 {currentUsers.map(user => (
                   <div key={user.id} className="bg-white dark:bg-primary shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105">
                     <div className="pt-[30%] bg-cover bg-[url(https://elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-e1464023124869.jpeg)] rounded"></div>
-                    <div className='w-[120px] md:w-[140px] rounded-full bg-[#ffffff] dark:bg-gray-900 mx-auto mt-[-25%] md:mt-[-25%] border-4 border-[#ef4444]'>
+                    <div className='w-[120px] xl:w-[140px] rounded-full bg-[#ffffff] dark:bg-gray-900 mx-auto mt-[-25%] xl:mt-[-25%] border-4 border-[#ef4444]'>
                       <img
-                        className='w-[110px] md:w-[132px] h-[110px] md:h-[132px] object-cover rounded-full'
+                        className='w-[110px] xl:w-[132px] h-[110px] xl:h-[132px] object-cover rounded-full'
                         src={user?.profile_picture || '/img/profile-icon-design.jpg'}
                         alt={`${user.first_name} ${user.last_name}`}
                       />
                     </div>
 
                     <div className="p-4">
-                      <h3 className="text-xl md:text-2xl font-bold mb-1 text-gray-900 dark:text-white">{user.first_name} {user.last_name}</h3>
+                      <h3 className="text-xl xl:text-2xl font-bold mb-1 text-gray-900 dark:text-white">{user.first_name} {user.last_name}</h3>
                       <p className="mb-1 flex gap-3 items-center text-gray-700 dark:text-gray-300"><MdOutlineMail /> {user.email}</p>
                       <p className="flex gap-3 items-center text-gray-700 dark:text-gray-300"><MdLocalPhone /> {user.phone_number}</p>
                       <Link
                         to={`/readerdetails/${user.id}`}
-                        className="w-fit mt-3 px-2 md:px-3 py-1 border rounded items-center gap-1 py-1.5 flex text-center leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
+                        className="w-fit mt-3 px-2 xl:px-3 py-1 border rounded items-center gap-1 py-1.5 flex text-center leading-5 text-gray-100 bg-red-500 border border-red-500 hover:text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none"
                         aria-label={t('Details for {{name}}', { name: `${user.first_name} ${user.last_name}` })}
                       >
                         {t('Details')} <RiExternalLinkFill />

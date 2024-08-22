@@ -21,7 +21,7 @@ const Settings = () => {
   const [isLoaded, setIsLoaded] = useState(false); // Dodajemy stan kontrolujący załadowanie ustawień
   const { isDarkMode, setIsDarkMode } = useDarkMode();
   const [selectedLanguage, setSelectedLanguage] = useState('US');
-  const { t } = useTranslation();
+  const { t } = useTranslation('settings');
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language');
@@ -74,9 +74,9 @@ const Settings = () => {
       <main className="flex-1 xl:pl-[16rem]">
         <TopHeader toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         <div className="p-6 min-h-[84.2vh]">
-          <div className="md:flex items-center mb-6 gap-4">
+          <div className="xl:flex items-center mb-6 gap-4">
           <button
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm md:text-base mb-4 md:mb-0"
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 flex gap-2 items-center text-sm xl:text-base mb-4 xl:mb-0"
               onClick={() => navigate(-1)}
             >
               <IoIosArrowBack /> {t('Back')}

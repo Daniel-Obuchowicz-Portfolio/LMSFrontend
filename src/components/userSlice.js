@@ -1,4 +1,3 @@
-// src/features/user/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -7,24 +6,32 @@ const initialState = {
   error: null,
 };
 
-export const fetchUserData = createAsyncThunk('user/fetchUserData', async () => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
+export const fetchUserData = createAsyncThunk(
+  'user/fetchUserData',
+  async (_, { rejectWithValue, dispatch }) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 401) {
+        // Jeśli status to 401, wywołaj akcję logout
+        dispatch(logout());
+        return rejectWithValue('Unauthorized');
+      } else {
+        throw new Error('Failed to fetch user data');
       }
-    });
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    } else {
-      throw new Error('Failed to fetch user data');
     }
+    return null;
   }
-  return null;
-});
+);
 
 const userSlice = createSlice({
   name: 'user',
@@ -46,7 +53,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       });
   },
 });
